@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
   let endpoint: URL;
   try {
-    endpoint = new URL('/rest/v1/waitlist_signups?on_conflict=email', url);
+    endpoint = new URL('/rest/v1/waitlist_signups', url);
     if (endpoint.protocol !== 'https:' || !endpoint.hostname.endsWith('.supabase.co')) throw new Error('Invalid Supabase URL');
   } catch {
     return NextResponse.json({ error: 'The waitlist is temporarily unavailable. Please try again later.' }, { status: 503 });
@@ -45,12 +45,12 @@ export async function POST(request: NextRequest) {
       headers: {
         apikey: key,
         'Content-Type': 'application/json',
-        Prefer: 'resolution=ignore-duplicates,return=minimal',
+        Prefer: 'return=minimal',
       },
       body: JSON.stringify({ email }),
       cache: 'no-store',
     });
-    if (!result.ok) throw new Error(`Supabase returned ${result.status}`);
+    if (result.status !== 409 && !result.ok) throw new Error(`Supabase returned ${result.status}`);
     return NextResponse.json({ demo: false });
   } catch (error) {
     console.error('Waitlist signup failed:', error);
