@@ -1,6 +1,6 @@
 # FitForTrip
 
-Editorial pre-launch landing page built with Next.js, React, TypeScript, Tailwind CSS, and Framer Motion. It includes a Supabase-backed waitlist API.
+FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, wardrobe pieces, outfit plans, packing progress, and inspiration links. It also links to Myntra, AJIO, Nykaa Fashion, Zara, and H&M India storefronts.
 
 ## Run locally
 
@@ -12,23 +12,19 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Set `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in `.env.local` for real local signup. With no keys, local development explicitly shows a demo success that stores no email. Production returns an error until Supabase is configured.
+The waitlist needs `SUPABASE_URL` and the server-only `SUPABASE_SECRET_KEY`. The app uses the project's public Supabase URL and publishable key; these can be overridden with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Never put the server secret in a `NEXT_PUBLIC_` variable or commit it.
 
-## Supabase setup
+## Supabase
 
-Create a Supabase project. In its SQL editor, run `supabase/migrations/20260923000000_create_waitlist_signups.sql`. Create a server secret key in **Settings → API Keys**. Put its project URL and secret key into Vercel's project environment variables for Production and Preview. Never add the secret key to a `NEXT_PUBLIC_` variable or commit it.
+Apply both SQL files in `supabase/migrations/` to the project. The waitlist table is server-only. The `trips` table has row-level security so signed-in users can only read and change their own trips. Enable email signup and configure the Supabase site/redirect URL for the deployed `/app` route so confirmation links return to the app.
 
-The `waitlist_signups` table denies browser roles and has no public read policy. The Next.js API route validates and normalizes email addresses, then inserts with the server-only key. Duplicate addresses count as a successful signup without creating another row.
+## Deploy and check
 
-## Deploy
-
-Push this directory to a GitHub repository and import it in Vercel as a Next.js project. Use the default root directory, `npm install`, and `npm run build`. Add the two Supabase environment variables before deploying. Vercel will deploy new commits automatically once the repository is connected.
-
-## Check
+The GitHub repository is connected to Vercel. A commit to `main` triggers a deployment. Keep the Supabase server URL and secret key in Vercel Production environment variables.
 
 ```sh
 npx tsc --noEmit
 npm run build
 ```
 
-The landing page, signup API, and packing interactions were checked locally. The production Next.js build passes. Images and fonts load from external providers. Product images and prices are illustrative; confirm reuse permission for retailer imagery before a commercial launch.
+Outfit suggestions are a starting point based on the user's entered closet and destination. Destination tips are general guidance, not live weather forecasts. Inspiration links are user-saved URLs rather than a Pinterest API feed. Shopping links open retailer storefronts, not matched products; prices and imagery on the landing page are illustrative. These integrations need additional work before a broader commercial launch.
