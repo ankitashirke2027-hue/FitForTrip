@@ -16,11 +16,11 @@ export type TripDetails={stops:Stop[];style:string;activities:string[];closet:Cl
 export type Trip={id:string;title:string;details:TripDetails;created_at:string;updated_at:string};
 export const newTrip=():TripDetails=>({stops:[{id:crypto.randomUUID(),destination:'Paris',start:'',end:''}],style:'Easy chic',activities:['Sightseeing'],closet:[],inspiration:[],outfits:[],notes:''});
 export const shops=[
-  {name:'Myntra',url:'https://www.myntra.com/'},
-  {name:'AJIO',url:'https://www.ajio.com/'},
-  {name:'Nykaa Fashion',url:'https://www.nykaafashion.com/'},
-  {name:'Zara',url:'https://www.zara.com/in/'},
-  {name:'H&M',url:'https://www2.hm.com/en_in/'},
+  {name:'Myntra',url:'/go/myntra'},
+  {name:'AJIO',url:'/go/ajio'},
+  {name:'Nykaa Fashion',url:'/go/nykaa-fashion'},
+  {name:'Zara',url:'/go/zara'},
+  {name:'H&M',url:'/go/hm'},
 ];
 export function validInspiration(value:string){try{const url=new URL(value);return url.protocol==='https:'||url.protocol==='http:'}catch{return false}}
 export function daysForStop(stop:Stop){if(!stop.start||!stop.end)return 1;const n=Math.floor((Date.parse(stop.end)-Date.parse(stop.start))/86400000)+1;return Number.isFinite(n)?Math.min(Math.max(n,1),14):1}
