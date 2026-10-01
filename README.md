@@ -14,6 +14,12 @@ npm run dev
 
 The waitlist needs `SUPABASE_URL` and the server-only `SUPABASE_SECRET_KEY`. The app uses the project's public Supabase URL and publishable key; these can be overridden with `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Never put the server secret in a `NEXT_PUBLIC_` variable or commit it.
 
+## Shopping and affiliate links
+
+The Shop tab sends visitors through stable `/go/{retailer}` links. Each link opens the ordinary retailer storefront until an approved tracking URL is configured in Vercel. After joining a retailer or affiliate-network program, create a complete HTTPS tracking link in its dashboard and add it as the matching server-side environment variable listed in `.env.example`. Redeploy so Vercel uses the new variable. Do not invent affiliate tags or assume a plain store link earns commission. Keep the shopping disclosure visible when tracked links are active.
+
+Nykaa has an [official affiliate program](https://affiliate.nykaa.com/) that supports Nykaa Fashion links; approval and link generation happen in the account dashboard. Confirm each other retailer's current program, regional eligibility, and terms before adding its tracking URL. Affiliate revenue and conversions are measured in the partner dashboard, not by FitForTrip's trip database.
+
 ## Supabase
 
 Apply both SQL files in `supabase/migrations/` to the project. The waitlist table is server-only. The `trips` table has row-level security so signed-in users can only read and change their own trips. Enable email signup and configure the Supabase site/redirect URL for the deployed `/app` route so confirmation links return to the app.
