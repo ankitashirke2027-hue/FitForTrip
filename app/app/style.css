@@ -141,6 +141,39 @@
 .fft-shop-looks img{width:48px;height:58px;object-fit:cover;border-radius:5px}
 .fft-moodboard .fft-empty{display:grid;justify-items:start;gap:10px;padding:25px}
 .fft-moodboard .fft-empty p{margin:0}
+.fft-day-progress{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 13px;color:#716a55;font-size:12px}
+.fft-day-progress strong{color:#2b2b23;font-size:13px}
+.fft-day-picker{display:flex;gap:9px;overflow-x:auto;scrollbar-width:thin;padding:3px 3px 13px;margin-bottom:25px}
+.fft-day-picker button{flex:0 0 123px;display:grid;gap:3px;text-align:left;padding:13px 14px;border:1px solid #dedbcc;border-radius:10px;background:#fffdf8;color:#2b2b23}
+.fft-day-picker button.active{background:#f7edbc;border-color:#b9a96c;box-shadow:0 5px 15px #463e1b13}
+.fft-day-picker button small{font-size:10px;letter-spacing:.1em;color:#736c53}
+.fft-day-picker button strong{font-family:'Instrument Serif',Georgia,serif;font-size:23px;font-weight:400;line-height:1}
+.fft-day-picker button span{font-size:11px;color:#736c53;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fft-day-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;border-top:1px solid #e4dfd2;padding-top:20px;margin-bottom:14px}
+.fft-day-heading h3{font-size:34px;margin:5px 0 0}
+.fft-day-heading>span{font-size:12px;color:#746d54}
+.fft-day-style{display:flex;align-items:center;justify-content:space-between;gap:13px;margin:17px 0}
+.fft-day-style>strong{font-size:13px;color:#4a4739}
+.fft-day-style>div{display:flex;gap:7px;flex-wrap:wrap}
+.fft-day-style button{border:1px solid #d7d0bc;border-radius:99px;background:#fffdf8;padding:9px 15px;color:#4a4739}
+.fft-day-style button.active{background:#292a22;color:#fff;border-color:#292a22}
+.fft-day-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 28px}
+.fft-day-options .fft-look-card{aspect-ratio:4/5}
+.fft-day-options .fft-look-overlay strong{font-size:25px}
+.fft-day-empty{margin:18px 0;text-align:left}
+.fft-next-day{display:block;margin:22px 0 0 auto;border:0;border-bottom:1px solid #45473a;background:transparent;padding:9px 0;color:#33362a;font-weight:700}
+.fft-piece-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fft-piece-shop{min-width:0;padding:15px;background:#fffdf8;border:1px solid #e4ddbd;border-radius:9px}
+.fft-piece-shop>strong{display:block;margin-bottom:11px;font-size:14px;color:#292a22}
+.fft-store-links{display:flex;gap:6px;flex-wrap:wrap}
+.fft-store-links a{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid #ddd8c5;border-radius:99px;background:#fff;color:#555143!important;font-size:11px;text-decoration:none}
+.fft-store-links a:hover{background:#eee8fa;border-color:#c6badb}
+.fft-store-links a span{font-size:13px}
+.fft-shop-day-hero{display:flex;align-items:center;gap:16px;margin:18px 0 20px;padding:12px;border:1px solid #e7e0ca;border-radius:10px;background:#fffdf8}
+.fft-shop-day-hero img{width:98px;height:120px;object-fit:cover;border-radius:7px}
+.fft-shop-day-hero h3{margin:5px 0;font-size:31px}
+.fft-shop-day-hero button{padding:0;border:0;border-bottom:1px solid #4b4d3f;background:none;color:#4b4d3f;font-size:12px}
+.fft-moodboard button:focus-visible,.fft-moodboard a:focus-visible{outline:3px solid #9c8c52;outline-offset:3px}
 @media(max-width:850px){.fft-sidebar{border-bottom-color:#e4dba9}}
 @media(max-width:600px){
   .fft-header{height:62px;width:calc(100% - 24px);margin-top:12px;padding:0 18px}
@@ -155,4 +188,10 @@
   .fft-look-overlay>span{font-size:10px}
   .fft-retailer-results{grid-template-columns:1fr}
   .fft-match-panel{padding:16px}
+  .fft-day-progress{align-items:start;flex-direction:column}
+  .fft-day-heading{align-items:start;flex-direction:column}
+  .fft-day-style{align-items:start;flex-direction:column}
+  .fft-day-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fft-day-options .fft-look-overlay strong{font-size:21px}
+  .fft-piece-list{grid-template-columns:1fr}
 }
