@@ -12,9 +12,9 @@ export type DestinationName=(typeof destinations)[number]['name'];
 export type Stop={id:string;destination:DestinationName;start:string;end:string};
 export type ClosetItem={id:string;name:string;category:'Top'|'Bottom'|'Dress'|'Layer'|'Shoes'|'Accessory'};
 export type Outfit={id:string;label:string;items:string[];packed:boolean};
-export type TripDetails={stops:Stop[];style:string;activities:string[];closet:ClosetItem[];inspiration:string[];outfits:Outfit[];notes:string};
+export type TripDetails={stops:Stop[];style:string;activities:string[];closet:ClosetItem[];inspiration:string[];selectedLooks?:string[];outfits:Outfit[];notes:string};
 export type Trip={id:string;title:string;details:TripDetails;created_at:string;updated_at:string};
-export const newTrip=():TripDetails=>({stops:[{id:crypto.randomUUID(),destination:'Paris',start:'',end:''}],style:'Easy chic',activities:['Sightseeing'],closet:[],inspiration:[],outfits:[],notes:''});
+export const newTrip=():TripDetails=>({stops:[{id:crypto.randomUUID(),destination:'Paris',start:'',end:''}],style:'Easy chic',activities:['Sightseeing'],closet:[],inspiration:[],selectedLooks:[],outfits:[],notes:''});
 export const shops=[
   {name:'Myntra',url:'https://www.myntra.com/'},
   {name:'AJIO',url:'https://www.ajio.com/'},
@@ -22,31 +22,6 @@ export const shops=[
   {name:'Zara',url:'https://www.zara.com/in/'},
   {name:'H&M',url:'https://www2.hm.com/en_in/'},
 ];
-export function pinterestIdeas(details:TripDetails){
-  const boards:Record<DestinationName,string>={
-    Bangkok:'https://www.pinterest.com/cariosab3rry/thailand-outfits/',
-    Phuket:'https://www.pinterest.com/cariosab3rry/thailand-outfits/',
-    Pattaya:'https://www.pinterest.com/cariosab3rry/thailand-outfits/',
-    'Chiang Mai':'https://www.pinterest.com/cariosab3rry/thailand-outfits/',
-    Krabi:'https://www.pinterest.com/cariosab3rry/thailand-outfits/',
-    Paris:'https://www.pinterest.com/joannajones2795/paris-outfit/',
-    London:'https://www.pinterest.com/londonkensingtonguide/london-travel-packing-tips-outfits-accessories/',
-    'New York City':'https://www.pinterest.com/juanicasley/nyc-outfits/',
-  };
-  const style=details.style.trim().slice(0,50)||'travel style';
-  const activity=details.activities[0]||'sightseeing';
-  return details.stops.map(stop=>{
-    const month=stop.start?new Date(`${stop.start}T12:00:00`).toLocaleString('en',{month:'long'}):'';
-    const place=stop.destination;
-    const searches=[
-      {label:'Outfit ideas',query:`${place} ${month} ${style} travel outfits`.replace(/\s+/g,' ').trim()},
-      {label:'What to wear',query:`${place} ${activity} outfit inspiration`},
-      {label:'Trip capsule',query:`${place} ${month} travel capsule wardrobe`.replace(/\s+/g,' ').trim()},
-    ];
-    return {place,boardUrl:boards[place],searches:searches.map(item=>({...item,url:`https://www.pinterest.com/search/pins/?q=${encodeURIComponent(item.query)}`}))};
-  });
-}
-export function validInspiration(value:string){try{const url=new URL(value);return url.protocol==='https:'||url.protocol==='http:'}catch{return false}}
 export function daysForStop(stop:Stop){if(!stop.start||!stop.end)return 1;const n=Math.floor((Date.parse(stop.end)-Date.parse(stop.start))/86400000)+1;return Number.isFinite(n)?Math.min(Math.max(n,1),14):1}
 export function planOutfits(details:TripDetails):Outfit[]{
   const by=(category:ClosetItem['category'])=>details.closet.filter(item=>item.category===category);
