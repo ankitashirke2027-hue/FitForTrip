@@ -103,10 +103,56 @@
 .fft-saved-heading{border-top-color:var(--fft-line)}
 .fft-pinterest-board{background:#fffdf8;border-color:var(--fft-line)}
 .fft-pinterest-board>a{color:var(--fft-ink)}
+.fft-moodboard>p{max-width:670px}
+.fft-board-groups{display:grid;gap:38px;margin:30px 0 36px}
+.fft-board-group{min-width:0}
+.fft-board-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:14px}
+.fft-board-title h3{margin:4px 0 0;font-size:32px}
+.fft-board-title>span{color:#77744e;font-size:13px}
+.fft-board-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.fft-look-card{position:relative;display:block;overflow:hidden;width:100%;aspect-ratio:4/4.5;padding:0;border:3px solid transparent;border-radius:13px;background:#e9e0c3;text-align:left;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.fft-look-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #32302422}
+.fft-look-card.active{border-color:#d7c266;box-shadow:0 0 0 3px #fff8d4,0 12px 30px #4b411d1e}
+.fft-look-card img{width:100%;height:100%;object-fit:cover;object-position:center 36%;display:block}
+.fft-look-overlay{position:absolute;inset:auto 0 0;padding:50px 17px 16px;color:#fff;background:linear-gradient(transparent,#1c1a14da);display:grid;gap:3px}
+.fft-look-overlay small{font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:.13em}
+.fft-look-overlay strong{font-family:'Instrument Serif',Georgia,serif;font-size:29px;line-height:1}
+.fft-look-overlay>span{font-family:'DM Sans',sans-serif;font-size:11px;margin-top:7px}
+.fft-match-panel{padding:24px;background:#f7edbc;border:1px solid #e5dba8;border-radius:14px}
+.fft-match-head{display:flex;justify-content:space-between;gap:16px}
+.fft-match-head h3{margin:5px 0 4px;font-size:32px}
+.fft-match-head p{margin:0 0 15px}
+.fft-match-star{font-size:32px;color:#82764a}
+.fft-piece-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.fft-piece-row button{background:#fffdf8;border:1px solid #cfc49c;border-radius:99px;padding:9px 13px;color:#444235;cursor:pointer}
+.fft-piece-row button.active,.fft-piece-row button:hover{background:#323327;border-color:#323327;color:white}
+.fft-retailer-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fft-retailer-results a{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0;padding:14px 16px;background:#fffdf8;border:1px solid #e3dec7;border-radius:9px;color:#272821;text-decoration:none;transition:transform .2s,background .2s}
+.fft-retailer-results a:hover{background:#eee8fa;transform:translateY(-2px)}
+.fft-retailer-results a span{display:grid;min-width:0;gap:3px}
+.fft-retailer-results a small{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#77744e}
+.fft-retailer-results a strong{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fft-retailer-results a b{font-size:20px;font-weight:400}
+.fft-match-panel>.fft-hint{margin:16px 0 0;font-size:12px}
+.fft-moodboard>.fft-hint{margin-top:18px;font-size:12px}
+.fft-shop-looks{display:flex;gap:10px;overflow:auto;margin:25px 0 18px;padding-bottom:5px}
+.fft-shop-looks button{display:flex;align-items:center;gap:10px;flex:none;padding:5px 13px 5px 5px;border:1px solid #dedbcc;border-radius:9px;background:#fffdf8;color:#323327;cursor:pointer}
+.fft-shop-looks button.active{border-color:#b7a05e;background:#f7edbc}
+.fft-shop-looks img{width:48px;height:58px;object-fit:cover;border-radius:5px}
+.fft-moodboard .fft-empty{display:grid;justify-items:start;gap:10px;padding:25px}
+.fft-moodboard .fft-empty p{margin:0}
 @media(max-width:850px){.fft-sidebar{border-bottom-color:#e4dba9}}
 @media(max-width:600px){
   .fft-header{height:62px;width:calc(100% - 24px);margin-top:12px;padding:0 18px}
   .fft-logo{font-size:22px!important}
   .fft-workspace-head h1{font-size:45px}
   .fft-auth-card h2{font-size:41px}
+  .fft-board-grid{gap:9px}
+  .fft-look-card{aspect-ratio:3/4}
+  .fft-look-overlay{padding:35px 9px 10px}
+  .fft-look-overlay strong{font-size:22px}
+  .fft-look-overlay small{font-size:8px}
+  .fft-look-overlay>span{font-size:10px}
+  .fft-retailer-results{grid-template-columns:1fr}
+  .fft-match-panel{padding:16px}
 }
