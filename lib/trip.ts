@@ -46,6 +46,8 @@ export function planOutfits(details:TripDetails):Outfit[]{
   const by=(category:ClosetItem['category'])=>details.closet.filter(item=>item.category===category);
   const pick=(category:ClosetItem['category'],i:number)=>{const list=by(category);return list.length?list[i%list.length].name:undefined};
   return tripDays(details).map(day=>{
+    const existing=details.outfits.find(outfit=>outfit.label===day.label);
+    if(existing)return existing;
     const chosen=lookForDay(details,day);
     if(chosen)return {id:crypto.randomUUID(),label:day.label,items:chosen.pieces,packed:false};
     const i=day.number-1;

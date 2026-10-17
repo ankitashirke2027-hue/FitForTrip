@@ -19,13 +19,17 @@ export const looks:MoodLook[]=[
 
 export function lookForDay(details:TripDetails,day:TripDay){
   const explicit=looks.find(look=>look.id===details.dayLooks?.[day.key]);
-  if(explicit)return explicit;
+  if(explicit&&explicit.place===placeForDestination(day.destination))return explicit;
   if(day.dayInStop!==1)return undefined;
   return looksForDestination(day.destination,details,day.date).find(look=>(details.selectedLooks||[]).includes(look.id));
 }
 
+function placeForDestination(destination:DestinationName){
+  return ['Bangkok','Phuket','Pattaya','Chiang Mai','Krabi'].includes(destination)?'Thailand':destination;
+}
+
 export function looksForDestination(destination:DestinationName,details:TripDetails,start:string){
-  const place=['Bangkok','Phuket','Pattaya','Chiang Mai','Krabi'].includes(destination)?'Thailand':destination;
+  const place=placeForDestination(destination);
   const month=start?Number(start.slice(5,7)):0;
   const cool=place==='Thailand'?false:month>=10||month<=3&&month>0;
   const preferences=`${details.style} ${details.activities.join(' ')}`.toLowerCase();
