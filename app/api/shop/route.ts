@@ -3,6 +3,7 @@ import {NextRequest,NextResponse} from 'next/server';
 import {looks} from '../../../lib/moodboard';
 
 export const runtime='nodejs';
+export const maxDuration=45;
 
 export async function GET(){return NextResponse.json({connected:!!process.env.SERPAPI_API_KEY})}
 
@@ -36,7 +37,7 @@ export async function POST(request:NextRequest){
   const endpoint=new URL('https://serpapi.com/search.json');
   endpoint.search=new URLSearchParams({engine:'google_shopping',q:query,gl:'in',hl:'en',api_key:key}).toString();
   try{
-    const response=await fetch(endpoint,{cache:'no-store',signal:AbortSignal.timeout(12000)});
+    const response=await fetch(endpoint,{cache:'no-store',signal:AbortSignal.timeout(35000)});
     if(!response.ok)throw new Error(`Search provider returned ${response.status}`);
     const payload=await response.json() as {error?:string;shopping_results?:ShoppingResult[]};
     if(payload.error)throw new Error(payload.error);
