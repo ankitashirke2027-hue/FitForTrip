@@ -143,6 +143,19 @@
 .fft-moodboard .fft-empty p{margin:0}
 .fft-day-progress{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 13px;color:#716a55;font-size:12px}
 .fft-day-progress strong{color:#2b2b23;font-size:13px}
+.fft-board-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:12px 0}
+.fft-board-toolbar h3{margin:0;font-size:31px}
+.fft-board-toolbar .fft-outline{width:auto;margin:0;padding:10px 16px;white-space:nowrap}
+.fft-trip-board{display:flex;gap:11px;overflow-x:auto;scrollbar-width:thin;padding:3px 3px 16px;margin-bottom:15px}
+.fft-trip-board-tile{position:relative;flex:0 0 158px;height:205px;overflow:hidden;padding:0;border:2px solid #dfd8bd;border-radius:11px;background:#ece4d1;text-align:left;color:#fff;cursor:pointer}
+.fft-trip-board-tile:nth-child(3n+2){background:#dcd5e8}
+.fft-trip-board-tile:nth-child(3n+3){background:#dfdacb}
+.fft-trip-board-tile.active{border-color:#87733e;box-shadow:0 0 0 3px #f7edbc}
+.fft-trip-board-tile img{object-fit:cover;object-position:center 30%}
+.fft-trip-board-empty{position:absolute;inset:0;display:grid;place-items:center;color:#a9a078;font:64px 'Instrument Serif',Georgia,serif}
+.fft-trip-board-caption{position:absolute;inset:auto 0 0;display:grid;gap:3px;padding:45px 11px 12px;background:linear-gradient(transparent,#24231cdb)}
+.fft-trip-board-caption small{font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+.fft-trip-board-caption strong{font:23px/1 'Instrument Serif',Georgia,serif}
 .fft-day-picker{display:flex;gap:9px;overflow-x:auto;scrollbar-width:thin;padding:3px 3px 13px;margin-bottom:25px}
 .fft-day-picker button{flex:0 0 123px;display:grid;gap:3px;text-align:left;padding:13px 14px;border:1px solid #dedbcc;border-radius:10px;background:#fffdf8;color:#2b2b23}
 .fft-day-picker button.active{background:#f7edbc;border-color:#b9a96c;box-shadow:0 5px 15px #463e1b13}
@@ -157,6 +170,7 @@
 .fft-day-style>div{display:flex;gap:7px;flex-wrap:wrap}
 .fft-day-style button{border:1px solid #d7d0bc;border-radius:99px;background:#fffdf8;padding:9px 15px;color:#4a4739}
 .fft-day-style button.active{background:#292a22;color:#fff;border-color:#292a22}
+.fft-style-note{margin:-4px 0 14px!important;color:#736246!important;font-size:12px!important}
 .fft-day-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 28px}
 .fft-day-options .fft-look-card{aspect-ratio:4/5}
 .fft-day-options .fft-look-overlay strong{font-size:25px}
@@ -189,6 +203,8 @@
   .fft-retailer-results{grid-template-columns:1fr}
   .fft-match-panel{padding:16px}
   .fft-day-progress{align-items:start;flex-direction:column}
+  .fft-board-toolbar{align-items:start;flex-direction:column}
+  .fft-trip-board-tile{flex-basis:132px;height:175px}
   .fft-day-heading{align-items:start;flex-direction:column}
   .fft-day-style{align-items:start;flex-direction:column}
   .fft-day-options{grid-template-columns:repeat(2,minmax(0,1fr))}

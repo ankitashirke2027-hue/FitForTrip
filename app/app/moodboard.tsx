@@ -18,10 +18,20 @@ function DayPicker({days,details,active,onPick}:{days:TripDay[];details:TripDeta
   })}</div>;
 }
 
-function ShopLook({look,day}:{look:MoodLook;day:TripDay}){
+function TripBoard({days,details,active,onPick}:{days:TripDay[];details:TripDetails;active:string;onPick:(key:string)=>void}){
+  return <div className="fft-trip-board" aria-label="Your trip mood board">{days.map(day=>{
+    const look=lookForDay(details,day);
+    return <button key={day.key} className={'fft-trip-board-tile '+(active===day.key?'active':'')} onClick={()=>onPick(day.key)} aria-label={`Day ${day.number}, ${day.label}: ${look?.title||'choose an outfit'}`} aria-current={active===day.key?'step':undefined}>
+      {look?<Image src={look.image} alt="" fill sizes="(max-width: 600px) 140px, 170px"/>:<span className="fft-trip-board-empty">✳</span>}
+      <span className="fft-trip-board-caption"><small>DAY {String(day.number).padStart(2,'0')} · {day.destination}</small><strong>{look?.title||'Choose a look'}</strong></span>
+    </button>;
+  })}</div>;
+}
+
+function ShopLook({look,day,pieces}:{look:MoodLook;day:TripDay;pieces:string[]}){
   return <section className="fft-match-panel" aria-label={`Shopping links for day ${day.number}`}>
     <div className="fft-match-head"><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} / SHOP THE LOOK</span><h3>{look.title}</h3><p>Pieces for {day.label}. Explore similar styles at each store.</p></div><span className="fft-match-star">✳</span></div>
-    <div className="fft-piece-list">{look.pieces.map(piece=><div className="fft-piece-shop" key={piece}>
+    <div className="fft-piece-list">{pieces.filter(Boolean).map((piece,index)=><div className="fft-piece-shop" key={`${piece}-${index}`}>
       <strong>{piece}</strong>
       <div className="fft-store-links">{retailers.map(store=><a key={store.name} href={store.url(piece)} target="_blank" rel="noopener noreferrer" aria-label={`Find ${piece} at ${store.name}`}>{store.name} <span>↗</span></a>)}</div>
     </div>)}</div>
@@ -38,12 +48,31 @@ export function Moodboard({details,onChange,initialDay,onDayChange}:{details:Tri
   const options=day?looksForDestination(day.destination,details,day.date).sort((a,b)=>Number(b.style===style)-Number(a.style===style)):[];
   const count=days.filter(item=>lookForDay(details,item)).length;
   const chooseDay=(key:string)=>{setFocused(key);onDayChange(key)};
+  const fillUnstyledDays=()=>{
+    const dayStyles={...details.dayStyles};
+    const dayLooks={...details.dayLooks};
+    const outfits=[...details.outfits];
+    for(const item of days){
+      if(lookForDay(details,item))continue;
+      const preferred=dayStyles[item.key]||styles[(item.number-1)%styles.length];
+      const options=looksForDestination(item.destination,details,item.date);
+      const look=options.find(option=>option.style===preferred)||options[0];
+      if(!look)continue;
+      dayStyles[item.key]=look.style;
+      dayLooks[item.key]=look.id;
+      const existing=outfits.findIndex(outfit=>outfit.label===item.label);
+      const outfit={id:existing>=0?outfits[existing].id:crypto.randomUUID(),label:item.label,items:look.pieces,packed:false};
+      if(existing>=0)outfits[existing]=outfit;else outfits.push(outfit);
+    }
+    onChange({dayStyles,dayLooks,outfits});
+  };
   const chooseStyle=(next:DayStyle)=>{
     if(!day)return;
     onChange({dayStyles:{...details.dayStyles,[day.key]:next}});
   };
   const chooseLook=(look:MoodLook)=>{
     if(!day)return;
+    if(chosen?.id===look.id)return;
     const existing=details.outfits.find(outfit=>outfit.label===day.label);
     const outfit={id:existing?.id||crypto.randomUUID(),label:day.label,items:look.pieces,packed:false};
     onChange({
@@ -56,15 +85,17 @@ export function Moodboard({details,onChange,initialDay,onDayChange}:{details:Tri
     <span className="fft-kicker">06 / YOUR DAY-BY-DAY MOODBOARD</span>
     <h2>Plan a look for every day.</h2>
     <p>Choose a day, set the style, then pick the outfit you want to wear. Shopping links follow that day’s outfit.</p>
-    <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>{days.length>1?'Choose each day below ✦':'Add travel dates in Trip plan to see every day ✦'}</span></div>
-    <DayPicker days={days} details={details} active={day?.key||''} onPick={chooseDay}/>
+    <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>{days.length>1?'Select a day on your board to style it ✦':'Add travel dates in Trip plan to see every day ✦'}</span></div>
+    <div className="fft-board-toolbar"><h3>Your trip board</h3>{count<days.length&&<button className="fft-outline" onClick={fillUnstyledDays}>Fill {days.length-count} empty {days.length-count===1?'day':'days'} ✳</button>}</div>
+    <TripBoard days={days} details={details} active={day?.key||''} onPick={chooseDay}/>
     {day&&<><div className="fft-day-heading"><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} · STOP {String(day.stopNumber).padStart(2,'0')}</span><h3>{day.label}</h3></div><span>{chosen?'Outfit chosen ♡':'Choose an outfit'}</span></div>
       <div className="fft-day-style"><strong>What’s the mood for this day?</strong><div>{styles.map(item=><button key={item} className={style===item?'active':''} aria-pressed={style===item} onClick={()=>chooseStyle(item)}>{item}</button>)}</div></div>
+      {chosen&&chosen.style!==style&&<p className="fft-style-note">Your current outfit is {chosen.style.toLowerCase()}. Choose a {style.toLowerCase()} look below to change it.</p>}
       <div className="fft-board-grid fft-day-options">{options.map(look=><button key={look.id} className={'fft-look-card '+(chosen?.id===look.id?'active':'')} onClick={()=>chooseLook(look)} aria-pressed={chosen?.id===look.id}>
         <Image src={look.image} alt={look.alt} fill sizes="(max-width: 600px) 45vw, 25vw"/>
         <span className="fft-look-overlay"><small>{look.style.toUpperCase()} · {look.occasion.toUpperCase()}</small><strong>{look.title}</strong><span>{chosen?.id===look.id?'Chosen for this day ♡':'Choose for this day ↗'}</span></span>
       </button>)}</div>
-      {chosen?<ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day}/>:<div className="fft-empty fft-day-empty">Pick one of the looks above to see its clothing links for Day {day.number}.</div>}
+      {chosen?<ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day} pieces={details.outfits.find(outfit=>outfit.label===day.label)?.items||chosen.pieces}/>:<div className="fft-empty fft-day-empty">Pick one of the looks above to see its clothing links for Day {day.number}.</div>}
       {day.number<days.length&&<button className="fft-next-day" onClick={()=>chooseDay(days[day.number].key)}>Plan Day {day.number+1} →</button>}
     </>}
     <p className="fft-hint">Save your trip to keep each day’s style and outfit. Images are original FitForTrip inspiration.</p>
@@ -82,6 +113,6 @@ export function ShopMoodboard({details,onInspiration}:{details:TripDetails;onIns
     <p>Select a day to see the outfit you chose and shopping links for every piece. Start with what you already own.</p>
     <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>Direct retailer searches · no commission links</span></div>
     <DayPicker days={days} details={details} active={day?.key||''} onPick={setFocused}/>
-    {day&&(chosen?<><div className="fft-shop-day-hero"><Image src={chosen.image} alt={chosen.alt} width={98} height={120}/><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} · {day.label.toUpperCase()}</span><h3>{chosen.title}</h3><button onClick={()=>onInspiration(day.key)}>Change this outfit ↗</button></div></div><ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day}/></>:<div className="fft-empty fft-day-empty"><p>No outfit chosen for Day {day.number} yet.</p><button className="fft-primary" onClick={()=>onInspiration(day.key)}>Choose a look for this day ↗</button></div>)}
+    {day&&(chosen?<><div className="fft-shop-day-hero"><Image src={chosen.image} alt={chosen.alt} width={98} height={120}/><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} · {day.label.toUpperCase()}</span><h3>{chosen.title}</h3><button onClick={()=>onInspiration(day.key)}>Change this outfit ↗</button></div></div><ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day} pieces={details.outfits.find(outfit=>outfit.label===day.label)?.items||chosen.pieces}/></>:<div className="fft-empty fft-day-empty"><p>No outfit chosen for Day {day.number} yet.</p><button className="fft-primary" onClick={()=>onInspiration(day.key)}>Choose a look for this day ↗</button></div>)}
   </div>;
 }
