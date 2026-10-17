@@ -9,8 +9,10 @@ import {tripDays,type DayStyle,type TripDay,type TripDetails} from '../../lib/tr
 const styles:DayStyle[]=['Easy','Polished','Evening'];
 declare global {interface Window {buildPinterest?:()=>void}}
 
-function PinterestPin({url}:{url:string}){
+function PinterestPin({url,onImage}:{url:string;onImage?:(imageUrl:string)=>void}){
   const mount=useRef<HTMLDivElement>(null);
+  const onImageRef=useRef(onImage);
+  useEffect(()=>{onImageRef.current=onImage},[onImage]);
   useEffect(()=>{
     if(!mount.current)return;
     mount.current.replaceChildren();
@@ -19,7 +21,14 @@ function PinterestPin({url}:{url:string}){
     link.textContent='View original Pin on Pinterest';
     link.setAttribute('data-pin-do','embedPin');
     mount.current.appendChild(link);
+    const observer=new MutationObserver(()=>{
+      const image=mount.current?.querySelector<HTMLElement>('[class*="_image"][style*="background-image"]');
+      const source=image?.style.backgroundImage.match(/^url\(["']?(.*?)["']?\)$/)?.[1];
+      if(source?.startsWith('https://i.pinimg.com/'))onImageRef.current?.(source);
+    });
+    observer.observe(mount.current,{childList:true,subtree:true,attributes:true,attributeFilter:['style']});
     window.buildPinterest?.();
+    return()=>observer.disconnect();
   },[url]);
   return <div ref={mount} className="fft-pin-embed" aria-label="Original Pinterest Pin"/>;
 }
@@ -45,7 +54,7 @@ function TripBoard({days,details,active,onPick}:{days:TripDay[];details:TripDeta
   })}</div>;
 }
 
-function ShopLook({look,day,pieces}:{look:MoodLook;day:TripDay;pieces:string[]}){
+function ShopLook({look,day,pieces,imageUrl}:{look:MoodLook;day:TripDay;pieces:string[];imageUrl:string}){
   type Product={title:string;source:string;price:string;image:string;url:string};
   const [pieceIndex,setPieceIndex]=useState(0);
   const [products,setProducts]=useState<Product[]>([]);
@@ -56,22 +65,23 @@ function ShopLook({look,day,pieces}:{look:MoodLook;day:TripDay;pieces:string[]})
   const activePiece=look.pieces[pieceIndex];
   const googleShoppingUrl=`https://www.google.com/search?udm=28&gl=in&hl=en&q=${encodeURIComponent(`women ${activePiece} ${look.style==='Evening'?'evening':'daywear'}`)}`;
   async function searchProducts(){
+    if(!imageUrl){setSearchMessage('The selected Pin image is still loading. Wait a moment, then try again.');return}
     setSearching(true);setSearchMessage('');setProducts([]);
     try{
       const {data:{session}}=await supabase.auth.getSession();
       if(!session)throw new Error('Please sign in again to search for products.');
-      const response=await fetch('/api/shop',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({lookId:look.id,pieceIndex})});
+      const response=await fetch('/api/shop',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({lookId:look.id,pieceIndex,imageUrl})});
       const result=await response.json() as {products?:Product[];error?:string};
       if(!response.ok)throw new Error(result.error||'Product search is unavailable.');
       setProducts(result.products||[]);
-      if(!result.products?.length)setSearchMessage('No products found for this piece. Try the store links below.');
+      if(!result.products?.length)setSearchMessage('No close shopping matches for this piece yet. Try another piece or the store links below.');
     }catch(error){setSearchMessage(error instanceof Error?error.message:'Product search is unavailable.')}finally{setSearching(false)}
   }
   return <section className="fft-match-panel" aria-label={`Shopping links for day ${day.number}`}>
     <div className="fft-match-head"><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} / SHOP THE LOOK</span><h3>{look.title}</h3><p>Pieces for {day.label}. Explore similar styles at each store.</p></div><span className="fft-match-star">✳</span></div>
-    <div className="fft-product-search"><h4>Find similar products</h4><p>Choose a piece from this Pinterest look. Results use the outfit description, so check the photo and details before buying.</p>
+    <div className="fft-product-search"><h4>Find pieces that match this Pin</h4><p>Choose a piece. We search using the selected Pinterest image, then show visual matches for that garment. Compare each result with the Pin before buying.</p>
       <div className="fft-piece-row" aria-label="Choose a piece to shop">{look.pieces.map((piece,index)=><button key={`${piece}-${index}`} className={pieceIndex===index?'active':''} aria-pressed={pieceIndex===index} onClick={()=>{setPieceIndex(index);setProducts([]);setSearchMessage('')}}>{piece}</button>)}</div>
-      <div className="fft-search-actions">{searchConnected&&<button className="fft-primary" onClick={searchProducts} disabled={searching}>{searching?'Finding products…':`Find ${activePiece} ↗`}</button>}<a href={googleShoppingUrl} target="_blank" rel="noopener noreferrer">Browse Google Shopping ↗</a></div>
+      <div className="fft-search-actions">{searchConnected&&<button className="fft-primary" onClick={searchProducts} disabled={searching||!imageUrl}>{searching?'Matching the Pin…':imageUrl?`Match ${activePiece} to this Pin ↗`:'Loading Pin image…'}</button>}<a href={googleShoppingUrl} target="_blank" rel="noopener noreferrer">Browse Google Shopping ↗</a></div>
       <p className="fft-search-message" role="status">{searchMessage}</p>
       {products.length>0&&<div className="fft-product-grid">{products.map((product,index)=><a className="fft-product-card" key={`${product.url}-${index}`} href={product.url} target="_blank" rel="noopener noreferrer">{product.image?<img src={product.image} alt="" loading="lazy"/>:<div className="fft-product-placeholder">✳</div>}<span><small>{product.source||'Google Shopping'}</small><strong>{product.title}</strong><b>{product.price}</b></span><em>View product ↗</em></a>)}</div>}
     </div>
@@ -80,7 +90,7 @@ function ShopLook({look,day,pieces}:{look:MoodLook;day:TripDay;pieces:string[]})
       <strong>{piece}</strong>
       <div className="fft-store-links">{retailers.map(store=><a key={store.name} href={store.url(piece)} target="_blank" rel="noopener noreferrer" aria-label={`Find ${piece} at ${store.name}`}>{store.name} <span>↗</span></a>)}</div>
     </div>)}</div>
-    <p className="fft-hint">Product results and store links are suggestions, not exact matches to the Pin. Prices and availability are set by each store. No commission links.</p>
+    <p className="fft-hint">Visual matches and store links are suggestions, not exact matches to the Pin. Prices and availability are set by each store. No commission links.</p>
   </section>;
 }
 
@@ -151,15 +161,17 @@ export function Moodboard({details,onChange,initialDay,onDayChange,onShop}:{deta
 export function ShopMoodboard({details,onInspiration,initialDay}:{details:TripDetails;onInspiration:(key:string)=>void;initialDay:string}){
   const days=tripDays(details);
   const [focused,setFocused]=useState(initialDay);
+  const [pinImage,setPinImage]=useState<{lookId:string;url:string}|null>(null);
   const day=days.find(item=>item.key===focused)||days[0];
   const chosen=day?lookForDay(details,day):undefined;
+  const imageUrl=pinImage&&chosen?.id===pinImage.lookId?pinImage.url:'';
   const count=days.filter(item=>lookForDay(details,item)).length;
   return <div className="fft-panel fft-wide fft-moodboard">
     <span className="fft-kicker">07 / SHOP YOUR DAILY LOOKS</span><h2>Find pieces for each day.</h2>
     <p>Select a day to see the outfit you chose and shopping links for every piece. Start with what you already own.</p>
     <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>Direct retailer searches · no commission links</span></div>
     <DayPicker days={days} details={details} active={day?.key||''} onPick={setFocused}/>
-    {day&&(chosen?<><div className="fft-shop-day-hero"><PinterestPin url={chosen.pinUrl}/><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} · {day.label.toUpperCase()}</span><h3>{chosen.title}</h3><button onClick={()=>onInspiration(day.key)}>Change this outfit ↗</button></div></div><ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day} pieces={details.dayLooks?.[day.key]===chosen.id?details.outfits.find(outfit=>outfit.label===day.label)?.items||chosen.pieces:chosen.pieces}/></>:<div className="fft-empty fft-day-empty"><p>No outfit chosen for Day {day.number} yet.</p><button className="fft-primary" onClick={()=>onInspiration(day.key)}>Choose a look for this day ↗</button></div>)}
+    {day&&(chosen?<><div className="fft-shop-day-hero"><PinterestPin url={chosen.pinUrl} onImage={url=>setPinImage(previous=>previous?.lookId===chosen.id&&previous.url===url?previous:{lookId:chosen.id,url})}/><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} · {day.label.toUpperCase()}</span><h3>{chosen.title}</h3><button onClick={()=>onInspiration(day.key)}>Change this outfit ↗</button></div></div><ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day} imageUrl={imageUrl} pieces={details.dayLooks?.[day.key]===chosen.id?details.outfits.find(outfit=>outfit.label===day.label)?.items||chosen.pieces:chosen.pieces}/></>:<div className="fft-empty fft-day-empty"><p>No outfit chosen for Day {day.number} yet.</p><button className="fft-primary" onClick={()=>onInspiration(day.key)}>Choose a look for this day ↗</button></div>)}
     <Script src="https://assets.pinterest.com/js/pinit.js" strategy="afterInteractive" data-pin-build="buildPinterest" onReady={()=>window.buildPinterest?.()}/>
   </div>;
 }
