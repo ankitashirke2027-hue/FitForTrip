@@ -60,29 +60,38 @@ function ShopLook({look,day,pieces,imageUrl}:{look:MoodLook;day:TripDay;pieces:s
   const [products,setProducts]=useState<Product[]>([]);
   const [searching,setSearching]=useState(false);
   const [searchMessage,setSearchMessage]=useState('');
+  const [showDescriptionSearch,setShowDescriptionSearch]=useState(false);
+  const [resultMethod,setResultMethod]=useState<'image'|'description'>('image');
   const [searchConnected,setSearchConnected]=useState(false);
   useEffect(()=>{let live=true;fetch('/api/shop').then(response=>response.json()).then(result=>{if(live)setSearchConnected(!!(result as {connected?:boolean}).connected)}).catch(()=>{});return()=>{live=false}},[]);
   const activePiece=look.pieces[pieceIndex];
+  const hasVisualDescriptor=/\b(yellow|red|blue|green|pink|black|white|brown|beige|cream|gold|silver|metallic|floral|striped|tweed|linen|leather|silk|satin|denim|cotton|pleated|ruffle|one-shoulder|halter|straight-leg|wide-leg)\b/i.test(activePiece);
   const googleShoppingUrl=`https://www.google.com/search?udm=28&gl=in&hl=en&q=${encodeURIComponent(`women ${activePiece} ${look.style==='Evening'?'evening':'daywear'}`)}`;
-  async function searchProducts(){
-    if(!imageUrl){setSearchMessage('The selected Pin image is still loading. Wait a moment, then try again.');return}
+  async function searchProducts(mode:'image'|'description'='image'){
+    if(mode==='image'&&!imageUrl){setSearchMessage('The selected Pin image is still loading. Wait a moment, then try again.');return}
     setSearching(true);setSearchMessage('');setProducts([]);
+    setShowDescriptionSearch(false);
     try{
       const {data:{session}}=await supabase.auth.getSession();
       if(!session)throw new Error('Please sign in again to search for products.');
-      const response=await fetch('/api/shop',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({lookId:look.id,pieceIndex,imageUrl})});
-      const result=await response.json() as {products?:Product[];error?:string};
+      const response=await fetch('/api/shop',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({lookId:look.id,pieceIndex,imageUrl,mode})});
+      const result=await response.json() as {products?:Product[];error?:string;method?:'image'|'description'};
       if(!response.ok)throw new Error(result.error||'Product search is unavailable.');
       setProducts(result.products||[]);
-      if(!result.products?.length)setSearchMessage('No close shopping matches for this piece yet. Try another piece or the store links below.');
+      setResultMethod(result.method||mode);
+      if(!result.products?.length){
+        setShowDescriptionSearch(mode==='image'&&hasVisualDescriptor);
+        setSearchMessage(mode==='image'?hasVisualDescriptor?'No close visual matches for this piece. Try its Pin-specific description or the store links below.':'No close visual matches for this piece. Try another piece or the store links below.':'No products found for this description. Try another piece or the store links below.');
+      }else if(mode==='description')setSearchMessage(`These products match “${activePiece}” from the Pin description. Compare their photos with the Pin before buying.`);
     }catch(error){setSearchMessage(error instanceof Error?error.message:'Product search is unavailable.')}finally{setSearching(false)}
   }
   return <section className="fft-match-panel" aria-label={`Shopping links for day ${day.number}`}>
     <div className="fft-match-head"><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} / SHOP THE LOOK</span><h3>{look.title}</h3><p>Pieces for {day.label}. Explore similar styles at each store.</p></div><span className="fft-match-star">✳</span></div>
     <div className="fft-product-search"><h4>Find pieces that match this Pin</h4><p>Choose a piece. We search using the selected Pinterest image, then show visual matches for that garment. Compare each result with the Pin before buying.</p>
-      <div className="fft-piece-row" aria-label="Choose a piece to shop">{look.pieces.map((piece,index)=><button key={`${piece}-${index}`} className={pieceIndex===index?'active':''} aria-pressed={pieceIndex===index} onClick={()=>{setPieceIndex(index);setProducts([]);setSearchMessage('')}}>{piece}</button>)}</div>
-      <div className="fft-search-actions">{searchConnected&&<button className="fft-primary" onClick={searchProducts} disabled={searching||!imageUrl}>{searching?'Matching the Pin…':imageUrl?`Match ${activePiece} to this Pin ↗`:'Loading Pin image…'}</button>}<a href={googleShoppingUrl} target="_blank" rel="noopener noreferrer">Browse Google Shopping ↗</a></div>
+      <div className="fft-piece-row" aria-label="Choose a piece to shop">{look.pieces.map((piece,index)=><button key={`${piece}-${index}`} className={pieceIndex===index?'active':''} aria-pressed={pieceIndex===index} onClick={()=>{setPieceIndex(index);setProducts([]);setSearchMessage('');setShowDescriptionSearch(false)}}>{piece}</button>)}</div>
+      <div className="fft-search-actions">{searchConnected&&<button className="fft-primary" onClick={()=>searchProducts()} disabled={searching||!imageUrl}>{searching?'Finding matches…':imageUrl?`Match ${activePiece} to this Pin ↗`:'Loading Pin image…'}</button>}{showDescriptionSearch&&<button className="fft-outline" onClick={()=>searchProducts('description')} disabled={searching}>Search “{activePiece}” ↗</button>}<a href={googleShoppingUrl} target="_blank" rel="noopener noreferrer">Browse Google Shopping ↗</a></div>
       <p className="fft-search-message" role="status">{searchMessage}</p>
+      {products.length>0&&<p className="fft-hint">{resultMethod==='image'?'Visual matches from the selected Pin':'Matches for the Pin-specific piece description'}</p>}
       {products.length>0&&<div className="fft-product-grid">{products.map((product,index)=><a className="fft-product-card" key={`${product.url}-${index}`} href={product.url} target="_blank" rel="noopener noreferrer">{product.image?<img src={product.image} alt="" loading="lazy"/>:<div className="fft-product-placeholder">✳</div>}<span><small>{product.source||'Google Shopping'}</small><strong>{product.title}</strong><b>{product.price}</b></span><em>View product ↗</em></a>)}</div>}
     </div>
     <h4 className="fft-store-heading">Search your favourite stores</h4>
