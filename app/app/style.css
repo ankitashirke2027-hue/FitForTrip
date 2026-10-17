@@ -171,9 +171,19 @@
 .fft-day-style button{border:1px solid #d7d0bc;border-radius:99px;background:#fffdf8;padding:9px 15px;color:#4a4739}
 .fft-day-style button.active{background:#292a22;color:#fff;border-color:#292a22}
 .fft-style-note{margin:-4px 0 14px!important;color:#736246!important;font-size:12px!important}
-.fft-day-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 28px}
+.fft-day-options{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 28px}
 .fft-day-options .fft-look-card{aspect-ratio:4/5}
 .fft-day-options .fft-look-overlay strong{font-size:25px}
+.fft-pin-card{min-width:0;overflow:hidden;border:2px solid #e4ddc3;border-radius:13px;background:#fffdf8}
+.fft-pin-card.active{border-color:#a18c4b;box-shadow:0 0 0 3px #f7edbc}
+.fft-pin-embed{min-height:310px;display:flex;align-items:flex-start;justify-content:center;overflow:hidden;padding:8px}
+.fft-pin-embed>a{display:block;margin:18px auto;color:#5d5260;text-align:center;font-size:12px}
+.fft-pin-embed>span{max-width:100%!important}
+.fft-pin-card-details{display:grid;gap:7px;padding:10px 12px 13px}
+.fft-pin-card-details small{font-size:10px;letter-spacing:.1em;color:#79715a}
+.fft-pin-card-details strong{font:22px/1.05 'Instrument Serif',Georgia,serif;color:#303025}
+.fft-pin-card-details button{margin-top:5px;padding:10px 8px;border:1px solid #c8b67b;border-radius:7px;background:#f7edbc;color:#302b1c;font-size:12px;font-weight:700;cursor:pointer}
+.fft-pin-card.active .fft-pin-card-details button{background:#303025;color:#fff}
 .fft-shop-selected{margin:0 0 8px}
 .fft-pinterest-reference{margin:20px 0 26px;padding:20px;border:1px solid #e5dba8;border-radius:14px;background:#fffaf0}
 .fft-pinterest-reference h3{font-size:28px;margin:5px 0}
@@ -189,11 +199,13 @@
 .fft-store-links a:hover{background:#eee8fa;border-color:#c6badb}
 .fft-store-links a span{font-size:13px}
 .fft-shop-day-hero{display:flex;align-items:center;gap:16px;margin:18px 0 20px;padding:12px;border:1px solid #e7e0ca;border-radius:10px;background:#fffdf8}
+.fft-shop-day-hero .fft-pin-embed{width:245px;min-width:245px;min-height:320px}
 .fft-shop-day-hero img{width:98px;height:120px;object-fit:cover;border-radius:7px}
 .fft-shop-day-hero h3{margin:5px 0;font-size:31px}
 .fft-shop-day-hero button{padding:0;border:0;border-bottom:1px solid #4b4d3f;background:none;color:#4b4d3f;font-size:12px}
 .fft-moodboard button:focus-visible,.fft-moodboard a:focus-visible{outline:3px solid #9c8c52;outline-offset:3px}
 @media(max-width:850px){.fft-sidebar{border-bottom-color:#e4dba9}}
+@media(max-width:1100px){.fft-day-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){
   .fft-header{height:62px;width:calc(100% - 24px);margin-top:12px;padding:0 18px}
   .fft-logo{font-size:22px!important}
@@ -212,7 +224,9 @@
   .fft-trip-board-tile{flex-basis:132px;height:175px}
   .fft-day-heading{align-items:start;flex-direction:column}
   .fft-day-style{align-items:start;flex-direction:column}
-  .fft-day-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fft-day-options{grid-template-columns:1fr}
+  .fft-shop-day-hero{flex-direction:column;align-items:stretch}
+  .fft-shop-day-hero .fft-pin-embed{width:100%;min-width:0}
   .fft-day-options .fft-look-overlay strong{font-size:21px}
   .fft-pinterest-reference{padding:15px}
   .fft-pinterest-embed{min-height:280px}
