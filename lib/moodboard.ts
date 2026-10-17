@@ -47,7 +47,7 @@ const thailand:Record<DayStyle,PinIdea[]>={
 const cities:Record<'Paris'|'London'|'New York City',Record<DayStyle,PinIdea[]>>={
   Paris:{
     Easy:[
-      pin('309692911898623269','Sunny Paris sneakers','Casual top','Comfortable sneakers'),
+      pin('309692911898623269','Sunny Paris sneakers','Brown leather-effect bomber jacket','Yellow sneakers'),
       pin('95771929569808303','Jeans in Paris','Straight-leg jeans','Everyday flats'),
       pin('151503974962664920','A denim café day','Denim jeans','Casual shirt'),
       pin('919156605217566105','Parisian street style','Relaxed top','Walking shoes'),
