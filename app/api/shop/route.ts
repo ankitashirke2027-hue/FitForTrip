@@ -26,7 +26,7 @@ const piecePattern=(piece:string)=>{
   if(/top|shirt|blouse|tee|sweater/i.test(piece))return /\b(top|shirt|blouse|tee|t-shirt|tank|camisole|sweater|jumper|cardigan)\b/i;
   if(/dress|gown/i.test(piece))return /\b(dress|gown|sundress|maxi|midi|mini)\b/i;
   if(/jeans|trousers|shorts|skirt|pants/i.test(piece))return /\b(jeans|denim|trousers|pants|shorts|skirt)\b/i;
-  if(/shoe|sneaker|flat|sandal|boot|heel/i.test(piece))return /\b(shoe|sneaker|flat|sandal|boot|heel|loafer|pump|trainer|footwear)\b/i;
+  if(/shoe|sneaker|flat|sandal|boot|heel/i.test(piece))return /\b(shoes?|sneakers?|flats?|sandals?|boots?|heels?|loafers?|pumps?|trainers?|footwear)\b/i;
   if(/bag|tote|clutch/i.test(piece))return /\b(bag|tote|clutch|purse|handbag)\b/i;
   return null;
 };
