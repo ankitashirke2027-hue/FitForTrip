@@ -198,6 +198,24 @@
 .fft-store-links a{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border:1px solid #ddd8c5;border-radius:99px;background:#fff;color:#555143!important;font-size:11px;text-decoration:none}
 .fft-store-links a:hover{background:#eee8fa;border-color:#c6badb}
 .fft-store-links a span{font-size:13px}
+.fft-product-search{margin:20px 0 25px;padding:21px;border:1px solid #e2d5ab;border-radius:11px;background:#fff8df}
+.fft-product-search h4,.fft-store-heading{margin:0 0 8px;font:26px 'Instrument Serif',Georgia,serif;color:#303025}
+.fft-product-search>p{margin:0 0 16px;font-size:13px;color:#716751}
+.fft-product-search .fft-piece-row{margin:0 0 14px}
+.fft-search-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.fft-search-actions .fft-primary{font-size:12px;padding:11px 15px}
+.fft-search-actions>a{font-size:12px;color:#69512e;text-decoration:underline}
+.fft-product-search .fft-search-message{min-height:18px;margin:12px 0 0;font-size:12px;color:#8b573d}
+.fft-product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:18px}
+.fft-product-card{display:grid;grid-template-rows:180px 1fr auto;gap:10px;min-width:0;padding:9px;border:1px solid #e2d9bd;border-radius:9px;background:#fffdf8;color:#303025;text-decoration:none}
+.fft-product-card img,.fft-product-placeholder{width:100%;height:180px;object-fit:contain;border-radius:5px;background:#f6f3eb}
+.fft-product-placeholder{display:grid;place-items:center;color:#c9b87f;font-size:40px}
+.fft-product-card span{display:grid;align-content:start;gap:5px}
+.fft-product-card small{color:#777057;font-size:10px;text-transform:uppercase;letter-spacing:.06em}
+.fft-product-card strong{font-size:12px;line-height:1.35}
+.fft-product-card b{font-size:13px;color:#65522d}
+.fft-product-card em{font-size:11px;font-style:normal;color:#866043}
+.fft-store-heading{margin:0 0 12px;font-size:23px}
 .fft-shop-day-hero{display:flex;align-items:center;gap:16px;margin:18px 0 20px;padding:12px;border:1px solid #e7e0ca;border-radius:10px;background:#fffdf8}
 .fft-shop-day-hero .fft-pin-embed{width:245px;min-width:245px;min-height:320px}
 .fft-shop-day-hero img{width:98px;height:120px;object-fit:cover;border-radius:7px}
