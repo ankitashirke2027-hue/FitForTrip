@@ -15,11 +15,17 @@ export const looks:MoodLook[]=[
   {id:'new-york-day',title:'Soho in sneakers',place:'New York City',image:'/moodboard/new-york-day.jpg',alt:'White shirt, black tailored trousers and white sneakers in New York',occasion:'Sightseeing',style:'Easy',season:'any',pieces:['White button-up shirt','Black tailored trousers','White sneakers','Tan shoulder bag'],tags:['easy','minimal','sightseeing','work']},
   {id:'new-york-weekend',title:'West Village weekend',place:'New York City',image:'/moodboard/new-york-weekend.jpg',alt:'Black blazer, striped top, blue jeans and loafers in New York',occasion:'Dining',style:'Polished',season:'any',pieces:['Black blazer','Striped top','Blue straight jeans','Black loafers'],tags:['chic','classic','dining','sightseeing']},
   {id:'new-york-evening',title:'Manhattan after hours',place:'New York City',image:'/moodboard/new-york-evening.jpg',alt:'Navy slip dress and cream blazer on a Manhattan evening street',occasion:'Dining',style:'Evening',season:'any',pieces:['Navy slip dress','Oversized cream blazer','Black low heels','Black shoulder bag'],tags:['dressy','dining','nightlife','chic']},
+  {id:'easy-morning',title:'Slow morning',place:'Anywhere',image:'/moodboard/easy-morning.png',alt:'Blue gingham cotton midi dress and flat sandals at a morning café',occasion:'Morning dress',style:'Easy',season:'warm',pieces:['Blue gingham cotton midi dress','White flat sandals','Woven crossbody bag'],tags:['easy','romantic','sightseeing']},
+  {id:'easy-evening',title:'Terrace at dusk',place:'Anywhere',image:'/moodboard/easy-evening.png',alt:'Terracotta cotton wrap dress and tan sandals on an evening terrace',occasion:'Evening dress',style:'Easy',season:'warm',pieces:['Terracotta cotton wrap dress','Tan flat sandals','Raffia clutch'],tags:['easy','dining','dressy']},
+  {id:'polished-morning',title:'Café first',place:'Anywhere',image:'/moodboard/polished-morning.png',alt:'White linen shirt dress with tan belt and ballet flats at a city café',occasion:'Morning dress',style:'Polished',season:'any',pieces:['White linen shirt dress','Tan leather belt','Black ballet flats','Structured tan tote'],tags:['chic','classic','sightseeing']},
+  {id:'polished-evening',title:'Dinner in navy',place:'Anywhere',image:'/moodboard/polished-evening.png',alt:'Navy midi dress, ivory cardigan and kitten heels at an evening restaurant',occasion:'Evening dress',style:'Polished',season:'any',pieces:['Navy bias-cut midi dress','Cropped ivory cardigan','Black kitten heels','Structured black bag'],tags:['chic','dining','dressy']},
+  {id:'evening-burgundy',title:'Satin hour',place:'Anywhere',image:'/moodboard/evening-burgundy.png',alt:'Burgundy satin slip dress with black blazer and low heels after dark',occasion:'Evening dress',style:'Evening',season:'any',pieces:['Burgundy satin slip dress','Draped black blazer','Black low heels','Gold earrings'],tags:['dressy','dining','nightlife']},
+  {id:'evening-blush',title:'Rooftop romance',place:'Anywhere',image:'/moodboard/evening-blush.png',alt:'Blush one-shoulder maxi dress with cream blazer on a rooftop at night',occasion:'Evening dress',style:'Evening',season:'any',pieces:['Blush one-shoulder maxi dress','Tailored cream blazer','Metallic sandals','Small clutch'],tags:['dressy','romantic','nightlife']},
 ];
 
 export function lookForDay(details:TripDetails,day:TripDay){
   const explicit=looks.find(look=>look.id===details.dayLooks?.[day.key]);
-  if(explicit&&explicit.place===placeForDestination(day.destination))return explicit;
+  if(explicit&&(explicit.place===placeForDestination(day.destination)||explicit.place==='Anywhere'))return explicit;
   if(day.dayInStop!==1)return undefined;
   return looksForDestination(day.destination,details,day.date).find(look=>(details.selectedLooks||[]).includes(look.id));
 }
@@ -33,8 +39,8 @@ export function looksForDestination(destination:DestinationName,details:TripDeta
   const month=start?Number(start.slice(5,7)):0;
   const cool=place==='Thailand'?false:month>=10||month<=3&&month>0;
   const preferences=`${details.style} ${details.activities.join(' ')}`.toLowerCase();
-  return looks.filter(look=>look.place===place).sort((a,b)=>{
-    const score=(look:MoodLook)=>look.tags.reduce((n,tag)=>n+(preferences.includes(tag)?2:0),0)+(look.season==='any'?1:look.season===(cool?'cool':'warm')?2:0);
+  return looks.filter(look=>look.place===place||look.place==='Anywhere').sort((a,b)=>{
+    const score=(look:MoodLook)=>look.tags.reduce((n,tag)=>n+(preferences.includes(tag)?2:0),0)+(look.season==='any'?1:look.season===(cool?'cool':'warm')?2:0)+(look.place===place?3:0);
     return score(b)-score(a);
   });
 }
