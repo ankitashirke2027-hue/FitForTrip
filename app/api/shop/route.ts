@@ -67,6 +67,7 @@ export async function POST(request:NextRequest){
     if(payload.error)throw new Error(payload.error);
     const pattern=piecePattern(piece);
     const matches=method==='image'?(payload.visual_matches||[]):(payload.shopping_results||[]);
+    const seenImages=new Set<string>();
     const products=matches.map(item=>({
       title:typeof item.title==='string'?item.title.slice(0,160):'',
       source:typeof item.source==='string'?item.source.slice(0,80):'',
@@ -78,7 +79,14 @@ export async function POST(request:NextRequest){
       const host=new URL(item.url).hostname;
       if(host==='www.zara.com'&&!new URL(item.url).pathname.startsWith('/in/'))return false;
       const color=piece.match(/\b(yellow|red|blue|green|pink|black|white|brown|beige|cream|gold|silver)\b/i)?.[0];
-      return !excludedHost.test(host)&&(!pattern||pattern.test(item.title))&&(!color||method==='image'||item.title.toLowerCase().includes(color.toLowerCase()))&&(method==='description'||!!item.price||knownStore.test(`${item.source} ${host}`));
+      if(method==='image'&&excludedHost.test(host))return false;
+      if(method==='description'&&host!=='www.google.com'&&excludedHost.test(host))return false;
+      if(pattern&&!pattern.test(item.title))return false;
+      if(color&&method==='description'&&!item.title.toLowerCase().includes(color.toLowerCase()))return false;
+      if(method==='image'&&!item.price&&!knownStore.test(`${item.source} ${host}`))return false;
+      if(seenImages.has(item.image))return false;
+      seenImages.add(item.image);
+      return true;
     }).slice(0,8);
     return NextResponse.json({piece,products,method});
   }catch(error){
