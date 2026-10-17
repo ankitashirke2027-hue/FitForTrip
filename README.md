@@ -16,7 +16,9 @@ The waitlist needs `SUPABASE_URL` and the server-only `SUPABASE_SECRET_KEY`. The
 
 ## Shopping links
 
-The Shop tab shows each trip day and opens ordinary retailer searches for every piece in its chosen outfit. FitForTrip does not use commission, tracking, or affiliate links. Search results are not verified product matches; retailer inventory and pricing can change.
+The Shop tab shows each trip day and opens ordinary retailer searches for every piece in its chosen outfit. It also links to Google Shopping for the selected outfit piece. To display product cards inside the app, add a private `SERPAPI_API_KEY` environment variable in Vercel Production and redeploy. The server verifies the signed-in user, derives the query from the chosen look, and calls SerpApi's Google Shopping endpoint. Without the key, the app hides its in-app search button and keeps the Google Shopping and retailer links available. Never put this key in a `NEXT_PUBLIC_` variable or commit it.
+
+FitForTrip does not use commission, tracking, or affiliate links. Product search uses the outfit's text description; it is not a visual match to the Pinterest image. Retailer inventory and pricing can change. Each in-app product search may use one SerpApi search credit.
 
 ## Supabase
 
@@ -24,11 +26,11 @@ Apply both SQL files in `supabase/migrations/` to the project. The waitlist tabl
 
 ## Deploy and check
 
-The GitHub repository is connected to Vercel. A commit to `main` triggers a deployment. Keep the Supabase server URL and secret key in Vercel Production environment variables.
+The GitHub repository is connected to Vercel. A commit to `main` triggers a deployment. Keep the Supabase server URL and secret key, plus optional SerpApi key, in Vercel Production environment variables.
 
 ```sh
 npx tsc --noEmit
 npm run build
 ```
 
-Outfit suggestions are a starting point based on the user's entered closet and destination. Destination tips are general guidance, not live weather forecasts. The Inspiration tab shows four curated Pinterest Pin embeds for each of the Easy, Polished, and Evening moods in every supported destination. The official Pinterest widget displays the original image and attribution; FitForTrip does not scrape, copy, or proxy Pin images. Pin availability depends on Pinterest and the Pin creator. Users choose a Pin for each trip day, save the trip, then use the Shop tab to search retailers for similar clothing categories. These are search links, not exact product matches or commission links. Filling missing days preserves existing choices. Prices and imagery on the landing page are illustrative. Live retailer catalogs and exact image-based product matching would need approved commerce data integrations before a broader commercial launch.
+Outfit suggestions are a starting point based on the user's entered closet and destination. Destination tips are general guidance, not live weather forecasts. The Inspiration tab shows four curated Pinterest Pin embeds for each of the Easy, Polished, and Evening moods in every supported destination. The official Pinterest widget displays the original image and attribution; FitForTrip does not scrape, copy, or proxy Pin images. Pin availability depends on Pinterest and the Pin creator. Filling missing days preserves existing choices. Prices and imagery on the landing page are illustrative.
