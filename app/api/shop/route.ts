@@ -16,7 +16,9 @@ const pinImageUrl=(value:unknown)=>{
   const href=safeUrl(value);
   if(!href)return '';
   const url=new URL(href);
-  return url.hostname==='i.pinimg.com'&&/\.(jpe?g|png|webp)$/i.test(url.pathname)?url.href:'';
+  if(url.hostname!=='i.pinimg.com'||!/\.(jpe?g|png|webp)$/i.test(url.pathname))return '';
+  url.pathname=url.pathname.replace(/^\/236x\//,'/736x/');
+  return url.href;
 };
 const piecePattern=(piece:string)=>{
   if(/top|shirt|blouse|tee|sweater|jacket|blazer|coat|cover-up/i.test(piece))return /\b(top|shirt|blouse|tee|t-shirt|tank|camisole|sweater|jumper|jacket|blazer|coat|cover-up|cardigan)\b/i;
@@ -52,7 +54,7 @@ export async function POST(request:NextRequest){
   if(!image)return NextResponse.json({error:'This Pin image has not loaded yet. Wait a moment, then try again.'},{status:400});
   const piece=look.pieces[pieceIndex as number];
   const endpoint=new URL('https://serpapi.com/search.json');
-  endpoint.search=new URLSearchParams({engine:'google_lens',type:'visual_matches',url:image,q:`women ${piece} buy online India`,country:'in',hl:'en',api_key:key}).toString();
+  endpoint.search=new URLSearchParams({engine:'google_lens',type:'visual_matches',url:image,country:'in',hl:'en',api_key:key}).toString();
   try{
     const response=await fetch(endpoint,{cache:'no-store',signal:AbortSignal.timeout(35000)});
     if(!response.ok)throw new Error(`Search provider returned ${response.status}`);
