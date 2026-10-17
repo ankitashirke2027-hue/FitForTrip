@@ -1,6 +1,6 @@
 # FitForTrip
 
-FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, wardrobe pieces, outfit plans, packing progress, and selected moodboard looks. It also searches for similar clothing pieces at Myntra, AJIO, Nykaa Fashion, Zara, and H&M India.
+FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, wardrobe pieces, outfit plans, packing progress, and a style and moodboard outfit for each trip day. It also searches for similar clothing pieces at Myntra, AJIO, Nykaa Fashion, Zara, and H&M India.
 
 ## Run locally
 
@@ -16,7 +16,7 @@ The waitlist needs `SUPABASE_URL` and the server-only `SUPABASE_SECRET_KEY`. The
 
 ## Shopping links
 
-The Shop tab opens ordinary retailer searches for the clothing piece selected from a look. FitForTrip does not use commission, tracking, or affiliate links. Search results are not verified product matches; retailer inventory and pricing can change.
+The Shop tab shows each trip day and opens ordinary retailer searches for every piece in its chosen outfit. FitForTrip does not use commission, tracking, or affiliate links. Search results are not verified product matches; retailer inventory and pricing can change.
 
 ## Supabase
 
@@ -31,4 +31,4 @@ npx tsc --noEmit
 npm run build
 ```
 
-Outfit suggestions are a starting point based on the user's entered closet and destination. Destination tips are general guidance, not live weather forecasts. The Inspiration tab shows original, curated outfit photographs for each destination, ordered around the trip's style, activities, and season. It does not scrape or display Pinterest content. Users select looks in the app, save the trip, then search retailers for similar clothing pieces. Prices and imagery on the landing page are illustrative. Live retailer catalogs and exact image-based product matching would need approved commerce data integrations before a broader commercial launch.
+Outfit suggestions are a starting point based on the user's entered closet and destination. Destination tips are general guidance, not live weather forecasts. The Inspiration tab shows a visual board for every trip day, with original, curated outfit photographs for each destination. It can fill unstyled days with varied looks while preserving existing choices. It does not scrape or display Pinterest content. Users select a style and look for each trip day, save the trip, then search retailers for similar clothing pieces. Edited outfit pieces feed the shopping links, and filling missing closet outfits preserves existing edits and packing progress. Prices and imagery on the landing page are illustrative. Live retailer catalogs and exact image-based product matching would need approved commerce data integrations before a broader commercial launch.
