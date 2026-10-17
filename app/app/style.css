@@ -174,6 +174,11 @@
 .fft-day-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 28px}
 .fft-day-options .fft-look-card{aspect-ratio:4/5}
 .fft-day-options .fft-look-overlay strong{font-size:25px}
+.fft-shop-selected{margin:0 0 8px}
+.fft-pinterest-reference{margin:20px 0 26px;padding:20px;border:1px solid #e5dba8;border-radius:14px;background:#fffaf0}
+.fft-pinterest-reference h3{font-size:28px;margin:5px 0}
+.fft-pinterest-reference p{font-size:13px;margin:0 0 16px}
+.fft-pinterest-embed{min-height:340px;overflow:hidden}
 .fft-day-empty{margin:18px 0;text-align:left}
 .fft-next-day{display:block;margin:22px 0 0 auto;border:0;border-bottom:1px solid #45473a;background:transparent;padding:9px 0;color:#33362a;font-weight:700}
 .fft-piece-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -209,5 +214,7 @@
   .fft-day-style{align-items:start;flex-direction:column}
   .fft-day-options{grid-template-columns:repeat(2,minmax(0,1fr))}
   .fft-day-options .fft-look-overlay strong{font-size:21px}
+  .fft-pinterest-reference{padding:15px}
+  .fft-pinterest-embed{min-height:280px}
   .fft-piece-list{grid-template-columns:1fr}
 }
