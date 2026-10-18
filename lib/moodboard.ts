@@ -13,7 +13,7 @@ const thailand:Record<DayStyle,PinIdea[]>={
     pin('248190629448687366','Temple day in Phuket','Summer dress','Comfortable sandals'),
     pin('157063105750853790','Krabi shore walk','Beach dress','Flat sandals'),
     pin('401805597982281656','Island floral dress','Floral summer dress','Woven bag'),
-    pin('1024709721506701886','Bangkok linen dress','Linen dress','Walking sandals'),
+    pin('518336238385150504','Phuket beach day','Beach cover-up','Raffia tote'),
     pin('600738037818291755','Bangkok skywalk day','Casual summer outfit','Flat sandals'),
     pin('829999406344478834','Chiang Mai outfit idea','Summer day outfit','Comfortable shoes'),
     pin('557320522636663906','Sunshine in Chiang Mai','Light cotton outfit','Woven bag'),
