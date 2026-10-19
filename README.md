@@ -1,6 +1,6 @@
 # FitForTrip
 
-FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, outfit plans, packing progress, and a style and moodboard outfit for each trip day. It also searches for similar clothing pieces at Myntra, AJIO, Nykaa Fashion, Zara, and H&M India.
+FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, selected looks, packing progress, and a moodboard look for each trip day. It also searches for similar clothing pieces at Myntra, AJIO, Nykaa Fashion, Zara, and H&M India.
 
 ## Run locally
 

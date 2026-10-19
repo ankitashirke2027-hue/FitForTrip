@@ -150,7 +150,7 @@ export function Moodboard({details,onChange,initialDay,onDayChange,onShop}:{deta
     });
   };
   return <div className="fft-panel fft-wide fft-moodboard">
-    <span className="fft-kicker">06 / YOUR DAY-BY-DAY MOODBOARD</span>
+    <span className="fft-kicker">03 / YOUR DAY-BY-DAY MOODBOARD</span>
     <h2>Plan a look for every day.</h2>
     <p>Choose a day and a mood, then pick from four real Pinterest Pins shown here. Find similar clothing in Shop.</p>
     <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>{days.length>1?'Select a day on your board to style it ✦':'Add travel dates in Trip plan to see every day ✦'}</span></div>
@@ -180,7 +180,7 @@ export function ShopMoodboard({details,onInspiration,initialDay}:{details:TripDe
   const imageUrl=pinImage&&chosen?.id===pinImage.lookId?pinImage.url:'';
   const count=days.filter(item=>lookForDay(details,item)).length;
   return <div className="fft-panel fft-wide fft-moodboard">
-    <span className="fft-kicker">07 / SHOP YOUR DAILY LOOKS</span><h2>Find pieces for each day.</h2>
+    <span className="fft-kicker">04 / SHOP YOUR DAILY LOOKS</span><h2>Find pieces for each day.</h2>
     <p>Select a day to see the outfit you chose and shopping links for every piece.</p>
     <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>Direct retailer searches · no commission links</span></div>
     <DayPicker days={days} details={details} active={day?.key||''} onPick={setFocused}/>

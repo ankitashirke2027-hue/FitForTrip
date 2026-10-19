@@ -1,5 +1,3 @@
-import {lookForDay,looksForDestination} from './moodboard';
-
 export const destinations = [
   {name:'Bangkok',country:'Thailand',climate:'tropical',tip:'Breathable layers and temple-ready coverage.'},
   {name:'Phuket',country:'Thailand',climate:'tropical',tip:'Light layers, swimwear, and rain-ready extras.'},
@@ -41,20 +39,4 @@ export function tripDays(details:TripDetails):TripDay[]{
     }
   });
   return result;
-}
-export function planOutfits(details:TripDetails):Pick<TripDetails,'outfits'|'dayStyles'|'dayLooks'>{
-  const dayStyles={...details.dayStyles};
-  const dayLooks={...details.dayLooks};
-  const outfits=tripDays(details).map(day=>{
-    const existing=details.outfits.find(outfit=>outfit.label===day.label);
-    if(existing)return existing;
-    const chosen=lookForDay(details,day);
-    if(chosen)return {id:crypto.randomUUID(),label:day.label,items:chosen.pieces,packed:false};
-    const preferred=dayStyles[day.key]||(['Easy','Polished','Evening'] as const)[(day.number-1)%3];
-    const options=looksForDestination(day.destination).filter(look=>look.style===preferred);
-    const look=options[(day.dayInStop-1)%options.length];
-    if(look){dayStyles[day.key]=look.style;dayLooks[day.key]=look.id}
-    return {id:crypto.randomUUID(),label:day.label,items:look?.pieces||[],packed:false};
-  });
-  return {outfits,dayStyles,dayLooks};
 }
