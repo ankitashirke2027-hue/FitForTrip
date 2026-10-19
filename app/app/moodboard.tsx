@@ -181,7 +181,7 @@ export function ShopMoodboard({details,onInspiration,initialDay}:{details:TripDe
   const count=days.filter(item=>lookForDay(details,item)).length;
   return <div className="fft-panel fft-wide fft-moodboard">
     <span className="fft-kicker">07 / SHOP YOUR DAILY LOOKS</span><h2>Find pieces for each day.</h2>
-    <p>Select a day to see the outfit you chose and shopping links for every piece. Start with what you already own.</p>
+    <p>Select a day to see the outfit you chose and shopping links for every piece.</p>
     <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>Direct retailer searches · no commission links</span></div>
     <DayPicker days={days} details={details} active={day?.key||''} onPick={setFocused}/>
     {day&&(chosen?<><div className="fft-shop-day-hero"><PinterestPin url={chosen.pinUrl} onImage={url=>setPinImage(previous=>previous?.lookId===chosen.id&&previous.url===url?previous:{lookId:chosen.id,url})}/><div><span className="fft-kicker">DAY {String(day.number).padStart(2,'0')} · {day.label.toUpperCase()}</span><h3>{chosen.title}</h3><button onClick={()=>onInspiration(day.key)}>Change this outfit ↗</button></div></div><ShopLook key={`${day.key}-${chosen.id}`} look={chosen} day={day} imageUrl={imageUrl} pieces={details.dayLooks?.[day.key]===chosen.id?details.outfits.find(outfit=>outfit.label===day.label)?.items||chosen.pieces:chosen.pieces}/></>:<div className="fft-empty fft-day-empty"><p>No outfit chosen for Day {day.number} yet.</p><button className="fft-primary" onClick={()=>onInspiration(day.key)}>Choose a look for this day ↗</button></div>)}

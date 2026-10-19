@@ -1,6 +1,6 @@
 # FitForTrip
 
-FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, wardrobe pieces, outfit plans, packing progress, and a style and moodboard outfit for each trip day. It also searches for similar clothing pieces at Myntra, AJIO, Nykaa Fashion, Zara, and H&M India.
+FitForTrip is a trip wardrobe planner. The public homepage introduces the product and collects optional update signups. The `/app` route lets anyone create an email account and save multi-stop trips, outfit plans, packing progress, and a style and moodboard outfit for each trip day. It also searches for similar clothing pieces at Myntra, AJIO, Nykaa Fashion, Zara, and H&M India.
 
 ## Run locally
 
@@ -33,4 +33,4 @@ npx tsc --noEmit
 npm run build
 ```
 
-Outfit suggestions are a starting point based on the user's entered closet and destination. Destination tips are general guidance, not live weather forecasts. The Inspiration tab shows four curated Pinterest Pin embeds for each of the Easy, Polished, and Evening moods in every supported destination. The official Pinterest widget displays the original image and attribution; FitForTrip does not scrape, copy, or proxy Pin images. Pin availability depends on Pinterest and the Pin creator. Filling missing days preserves existing choices. Prices and imagery on the landing page are illustrative.
+Outfit suggestions come from the destination moodboard and the user's chosen looks. Destination tips are general guidance, not live weather forecasts. The Inspiration tab shows four curated Pinterest Pin embeds for each of the Easy, Polished, and Evening moods in every supported destination. The official Pinterest widget displays the original image and attribution; FitForTrip does not scrape, copy, or proxy Pin images. Pin availability depends on Pinterest and the Pin creator. Filling missing days preserves existing choices. Prices and imagery on the landing page are illustrative.

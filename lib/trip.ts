@@ -1,4 +1,4 @@
-import {lookForDay} from './moodboard';
+import {lookForDay,looksForDestination} from './moodboard';
 
 export const destinations = [
   {name:'Bangkok',country:'Thailand',climate:'tropical',tip:'Breathable layers and temple-ready coverage.'},
@@ -16,9 +16,9 @@ export type ClosetItem={id:string;name:string;category:'Top'|'Bottom'|'Dress'|'L
 export type Outfit={id:string;label:string;items:string[];packed:boolean};
 export type DayStyle='Easy'|'Polished'|'Evening';
 export type TripDay={key:string;number:number;dayInStop:number;stopNumber:number;destination:DestinationName;date:string;label:string};
-export type TripDetails={stops:Stop[];style:string;activities:string[];closet:ClosetItem[];inspiration:string[];selectedLooks?:string[];dayStyles?:Record<string,DayStyle>;dayLooks?:Record<string,string>;outfits:Outfit[];notes:string};
+export type TripDetails={stops:Stop[];style:string;activities:string[];closet?:ClosetItem[];inspiration:string[];selectedLooks?:string[];dayStyles?:Record<string,DayStyle>;dayLooks?:Record<string,string>;outfits:Outfit[];notes:string};
 export type Trip={id:string;title:string;details:TripDetails;created_at:string;updated_at:string};
-export const newTrip=():TripDetails=>({stops:[{id:crypto.randomUUID(),destination:'Paris',start:'',end:''}],style:'Easy chic',activities:['Sightseeing'],closet:[],inspiration:[],selectedLooks:[],dayStyles:{},dayLooks:{},outfits:[],notes:''});
+export const newTrip=():TripDetails=>({stops:[{id:crypto.randomUUID(),destination:'Paris',start:'',end:''}],style:'Easy chic',activities:['Sightseeing'],inspiration:[],selectedLooks:[],dayStyles:{},dayLooks:{},outfits:[],notes:''});
 export const shops=[
   {name:'Myntra',url:'https://www.myntra.com/'},
   {name:'AJIO',url:'https://www.ajio.com/'},
@@ -42,20 +42,19 @@ export function tripDays(details:TripDetails):TripDay[]{
   });
   return result;
 }
-export function planOutfits(details:TripDetails):Outfit[]{
-  const by=(category:ClosetItem['category'])=>details.closet.filter(item=>item.category===category);
-  const pick=(category:ClosetItem['category'],i:number)=>{const list=by(category);return list.length?list[i%list.length].name:undefined};
-  return tripDays(details).map(day=>{
+export function planOutfits(details:TripDetails):Pick<TripDetails,'outfits'|'dayStyles'|'dayLooks'>{
+  const dayStyles={...details.dayStyles};
+  const dayLooks={...details.dayLooks};
+  const outfits=tripDays(details).map(day=>{
     const existing=details.outfits.find(outfit=>outfit.label===day.label);
     if(existing)return existing;
     const chosen=lookForDay(details,day);
     if(chosen)return {id:crypto.randomUUID(),label:day.label,items:chosen.pieces,packed:false};
-    const i=day.number-1;
-    const destination=destinations.find(item=>item.name===day.destination)!;
-    const items=[pick('Dress',i) || [pick('Top',i)|| (destination.climate==='tropical'?'Breathable top':'Versatile top'),pick('Bottom',i)||'Comfortable bottom'].join(' + '),pick('Shoes',i)||'Walkable shoes'];
-    const layer=pick('Layer',i)|| (destination.climate==='temperate'?'Light layer':undefined);
-    if(layer)items.push(layer);
-    if(by('Accessory').length)items.push(pick('Accessory',i)!);
-    return {id:crypto.randomUUID(),label:day.label,items,packed:false};
+    const preferred=dayStyles[day.key]||(['Easy','Polished','Evening'] as const)[(day.number-1)%3];
+    const options=looksForDestination(day.destination).filter(look=>look.style===preferred);
+    const look=options[(day.dayInStop-1)%options.length];
+    if(look){dayStyles[day.key]=look.style;dayLooks[day.key]=look.id}
+    return {id:crypto.randomUUID(),label:day.label,items:look?.pieces||[],packed:false};
   });
+  return {outfits,dayStyles,dayLooks};
 }

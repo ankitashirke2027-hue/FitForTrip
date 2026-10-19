@@ -250,3 +250,5 @@
   .fft-pinterest-embed{min-height:280px}
   .fft-piece-list{grid-template-columns:1fr}
 }
+
+.fft-pack-grid{display:block}
