@@ -152,7 +152,7 @@ export function Moodboard({details,onChange,initialDay,onDayChange,onShop}:{deta
   return <div className="fft-panel fft-wide fft-moodboard">
     <span className="fft-kicker">03 / YOUR DAY-BY-DAY MOODBOARD</span>
     <h2>Plan a look for every day.</h2>
-    <p>Choose a day and a mood, then pick from four real Pinterest Pins shown here. Find similar clothing in Shop.</p>
+    <p>Choose a day and a mood, then pick from eight real Pinterest Pins shown here. Find similar clothing in Shop.</p>
     <div className="fft-day-progress"><strong>{count} of {days.length} days styled</strong><span>{days.length>1?'Select a day on your board to style it ✦':'Add travel dates in Trip plan to see every day ✦'}</span></div>
     <div className="fft-board-toolbar"><h3>Your trip board</h3>{count<days.length&&<button className="fft-outline" onClick={fillUnstyledDays}>Fill {days.length-count} empty {days.length-count===1?'day':'days'} ✳</button>}</div>
     <TripBoard days={days} details={details} active={day?.key||''} onPick={chooseDay}/>
