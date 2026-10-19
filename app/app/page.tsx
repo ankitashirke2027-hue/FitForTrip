@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
-import type {User} from '@supabase/supabase-js';
+import {isAuthSessionMissingError,type User} from '@supabase/supabase-js';
 import {supabase} from '../../lib/supabase-browser';
 import {Moodboard,ShopMoodboard} from './moodboard';
 import {destinations,newTrip,planOutfits,type ClosetItem,type DestinationName,type Trip,type TripDetails} from '../../lib/trip';
@@ -14,7 +14,7 @@ function App(){
   const [mode,setMode]=useState<'signin'|'signup'>('signup'),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
   const [draft,setDraft]=useState<TripDetails>(newTrip),[title,setTitle]=useState('My next trip'),[tab,setTab]=useState<'plan'|'outfits'|'packing'|'inspo'|'shop'>('plan'),[inspoDay,setInspoDay]=useState('');
   const [itemName,setItemName]=useState(''),[itemCategory,setItemCategory]=useState<ClosetItem['category']>('Top');
-  useEffect(()=>{let live=true;supabase.auth.getUser().then(({data,error})=>{if(!live)return;if(error){setMessage('We could not reach sign-in. Check your connection and try again.');return}setUser(data.user)}).catch(()=>{if(live)setMessage('We could not reach sign-in. Check your connection and try again.')}).finally(()=>{if(live)setLoading(false)});const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{if(!live)return;setUser(session?.user||null);if(!session?.user){setTrips([]);setActive(null)}});return()=>{live=false;subscription.unsubscribe()}},[]);
+  useEffect(()=>{let live=true;supabase.auth.getUser().then(({data,error})=>{if(!live)return;if(error){if(!isAuthSessionMissingError(error))setMessage('We could not reach sign-in. Check your connection and try again.');return}setUser(data.user)}).catch(()=>{if(live)setMessage('We could not reach sign-in. Check your connection and try again.')}).finally(()=>{if(live)setLoading(false)});const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{if(!live)return;setUser(session?.user||null);if(!session?.user){setTrips([]);setActive(null)}});return()=>{live=false;subscription.unsubscribe()}},[]);
   useEffect(()=>{if(!user)return;let live=true;void (async()=>{try{const {data,error}=await supabase.from('trips').select('id,title,details,created_at,updated_at').order('updated_at',{ascending:false});if(!live)return;if(error)setMessage(error.message);else setTrips((data||[]) as Trip[])}catch{if(live)setMessage('We could not load your trips. Check your connection and refresh the page.')}})();return()=>{live=false}},[user]);
   function selectTrip(trip:Trip){setActive(trip);setDraft(trip.details);setTitle(trip.title);setTab('plan');setMessage('')}
   function startTrip(){setActive(null);setDraft(newTrip());setTitle('My next trip');setTab('plan');setMessage('')}
