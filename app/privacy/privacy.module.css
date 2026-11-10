@@ -1,0 +1,23 @@
+.page{min-height:100vh;background:#fff9f5;color:#292a22;padding:0 max(6vw,24px);font-family:Arial,Helvetica,sans-serif}
+.header{max-width:1120px;margin:0 auto;height:94px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #dedbcc}
+.brand{font-family:Georgia,serif;font-size:27px;letter-spacing:-1px;font-weight:700}
+.brand span{color:#77744e}
+.appLink{font-size:13px;border-bottom:1px solid #77744e;padding:0 0 5px}
+.content{max-width:790px;margin:0 auto;padding:78px 0 90px}
+.eyebrow{font-size:11px;letter-spacing:2px;color:#64634f;margin:0 0 20px}
+.content h1{font-family:Georgia,serif;font-size:clamp(54px,8vw,84px);font-weight:400;line-height:.98;letter-spacing:-3px;margin:0 0 18px}
+.content h1 em{color:#77744e}
+.updated{font-size:12px;color:#827c70;margin:0 0 34px}
+.lede{font-family:Georgia,serif;font-size:23px;line-height:1.55;color:#55544b;margin:0 0 56px}
+.content section{border-top:1px solid #dedbcc;padding:28px 0 31px}
+.content h2{font-family:Georgia,serif;font-size:30px;font-weight:400;letter-spacing:-.5px;margin:0 0 16px}
+.content p,.content li{font-size:15px;line-height:1.8;color:#625f57}
+.content p+p{margin-top:15px}
+.content ul{padding-left:22px;margin:0}
+.content li+li{margin-top:11px}
+.content strong{color:#292a22}
+.content a{color:#555c38;text-decoration:underline;text-underline-offset:3px}
+.content code{font-size:.86em;background:#f0eddf;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}
+.footer{max-width:1120px;margin:0 auto;border-top:1px solid #dedbcc;padding:25px 0 38px;display:flex;justify-content:space-between;font-size:12px;color:#827c70}
+.footer a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:600px){.header{height:76px}.brand{font-size:23px}.content{padding:55px 0 60px}.content h1{font-size:58px;letter-spacing:-2px}.lede{font-size:20px;margin-bottom:42px}.content h2{font-size:26px}.content p,.content li{font-size:14px}.footer{font-size:11px;gap:20px;align-items:flex-start}}

@@ -59,6 +59,12 @@ export async function POST(request:NextRequest){
   if(method==='description'&&!visualDescriptor.test(piece))return NextResponse.json({error:'This piece needs a more specific description before we can search by text.'},{status:400});
   const image=pinImageUrl(imageUrl);
   if(method==='image'&&!image)return NextResponse.json({error:'This Pin image has not loaded yet. Wait a moment, then try again.'},{status:400});
+  const {data:usage,error:usageError}=await auth.rpc('consume_shop_search',{p_user_id:user.id});
+  if(usageError){
+    console.error('Shop search quota check failed:',usageError.message);
+    return NextResponse.json({error:'Product search is temporarily unavailable. Please try again shortly.'},{status:503});
+  }
+  if(usage===null)return NextResponse.json({error:'You’ve reached today’s limit of 20 product searches. Please come back tomorrow.'},{status:429});
   const endpoint=new URL('https://serpapi.com/search.json');
   endpoint.search=new URLSearchParams(method==='image'?{engine:'google_lens',type:'visual_matches',url:image,country:'in',hl:'en',api_key:key}:{engine:'google_shopping',q:`women ${piece}`,gl:'in',hl:'en',api_key:key}).toString();
   try{
