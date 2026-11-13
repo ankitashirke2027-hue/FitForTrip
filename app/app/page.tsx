@@ -20,17 +20,18 @@ function App(){
   async function authSubmit(event:React.FormEvent){event.preventDefault();setBusy(true);setMessage('');setShowResend(false);try{
     if(mode==='forgot'){
       const {error}=await supabase.auth.resetPasswordForEmail(email.trim(),{redirectTo:`${location.origin}/app`});
-      setMessage(error?authErrorMessage(error.message):'If an account exists for that email, password reset instructions are on the way.');
+      setMessage(error?authErrorMessage(error.message,error.code):'If an account exists for that email, password reset instructions are on the way.');
       return;
     }
     if(mode==='reset'){
       const {error}=await supabase.auth.updateUser({password});
-      if(error){setMessage(authErrorMessage(error.message));return}
+      if(error){setMessage(authErrorMessage(error.message,error.code));return}
       const {error:signOutError}=await supabase.auth.signOut();setPassword('');setMode('signin');setMessage(signOutError?'Password updated. Sign out, then sign in with your new password.':'Password updated. Sign in with your new password.');return;
     }
     const result=mode==='signup'?await supabase.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:`${location.origin}/app`,data:captureFirstTouchAttribution()}}):await supabase.auth.signInWithPassword({email:email.trim(),password});
     if(result.error){
       const code=(result.error as {code?:string}).code;
+      if(code==='over_email_send_rate_limit'||/email rate limit exceeded/i.test(result.error.message)){setMessage('FitForTrip has reached its hourly limit for auth emails. Please wait before requesting another email. The current Supabase sender allows 2 emails per hour; custom SMTP is the lasting fix.');return}
       if(mode==='signin'&&(code==='email_not_confirmed'||/email not confirmed/i.test(result.error.message))){setShowResend(true);setMessage('Please confirm your email before signing in. Resend the confirmation email below.');return}
       if(mode==='signin'&&(code==='invalid_credentials'||/invalid login credentials/i.test(result.error.message))){setMessage('That email and password did not match. Try again or reset your password.');return}
       if(mode==='signup'&&/already registered|already been registered/i.test(result.error.message)){setMode('signin');setMessage('An account with this email already exists. Sign in or reset your password.');return}
@@ -40,8 +41,8 @@ function App(){
     }
     if(mode==='signup')clearFirstTouchAttribution();setPassword('');if(mode==='signup'&&!result.data.session){setShowResend(true);setMessage('Check your inbox, including spam, and confirm your email before signing in.')}else setMessage('Welcome to FitForTrip. ✦');
   }catch{setMessage('We could not reach sign-in. Check your connection and try again.')}finally{setBusy(false)}}
-  function authErrorMessage(error:string){if(/failed to fetch|fetch failed|networkerror/i.test(error))return 'We could not reach sign-in. Check your connection and try again.';return error}
-  async function resendConfirmation(){if(!email.trim()){setMessage('Enter your email above first.');return}setBusy(true);setMessage('');try{const {error}=await supabase.auth.resend({type:'signup',email:email.trim(),options:{emailRedirectTo:`${location.origin}/app`}});setMessage(error?authErrorMessage(error.message):'If this account needs confirmation, a new email is on the way. Check your inbox and spam folder.')}catch{setMessage('We could not reach sign-in. Check your connection and try again.')}finally{setBusy(false)}}
+  function authErrorMessage(error:string,code?:string){if(code==='over_email_send_rate_limit'||/email rate limit exceeded/i.test(error))return 'FitForTrip has reached its hourly limit for auth emails. Please wait before requesting another email. The current Supabase sender allows 2 emails per hour; custom SMTP is the lasting fix.';if(code==='over_request_rate_limit')return 'Too many requests from this network just now. Wait a few minutes, then try again.';if(/failed to fetch|fetch failed|networkerror/i.test(error))return 'We could not reach sign-in. Check your connection and try again.';return error}
+  async function resendConfirmation(){if(!email.trim()){setMessage('Enter your email above first.');return}setBusy(true);setMessage('');try{const {error}=await supabase.auth.resend({type:'signup',email:email.trim(),options:{emailRedirectTo:`${location.origin}/app`}});setMessage(error?authErrorMessage(error.message,error.code):'If this account needs confirmation, a new email is on the way. Check your inbox and spam folder.')}catch{setMessage('We could not reach sign-in. Check your connection and try again.')}finally{setBusy(false)}}
   async function save(){if(!user)return;if(!title.trim()){setMessage('Give your trip a name.');return}if(draft.stops.some(s=>s.start&&s.end&&s.end<s.start)){setMessage('Each stop needs an end date after its start date.');return}setBusy(true);setMessage('');try{const payload={title:title.trim(),details:draft,user_id:user.id,updated_at:new Date().toISOString()};const result=active?await supabase.from('trips').update(payload).eq('id',active.id).select('id,title,details,created_at,updated_at').single():await supabase.from('trips').insert(payload).select('id,title,details,created_at,updated_at').single();if(result.error){setMessage(result.error.message);return}const saved=result.data as Trip;setActive(saved);setTrips(old=>[saved,...old.filter(t=>t.id!==saved.id)]);if(tab==='plan'){setTab('inspo');setMessage('Trip saved. Choose a look for each day below. ✦')}else setMessage('Trip saved. ✦')}catch{setMessage('We could not save your trip. Check your connection and try again.')}finally{setBusy(false)}}
   async function removeTrip(){if(!active||!confirm(`Delete “${active.title}”?`))return;try{const {error}=await supabase.from('trips').delete().eq('id',active.id);if(error){setMessage(error.message);return}setTrips(old=>old.filter(t=>t.id!==active.id));startTrip();setMessage('Trip deleted.')}catch{setMessage('We could not delete this trip. Check your connection and try again.')}}
   function change(patch:Partial<TripDetails>){setDraft(old=>({...old,...patch}));setMessage('')}
