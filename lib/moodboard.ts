@@ -158,6 +158,104 @@ const cities:Record<'Paris'|'London'|'New York City',Record<DayStyle,PinIdea[]>>
     ],
   },
 };
+const newDestinationLooks:Record<'Sri Lanka'|'Udaipur'|'Jaipur',Record<DayStyle,PinIdea[]>>={
+  'Sri Lanka':{
+    Easy:[
+      pin('1007399010406309472','Galle Fort summer stroll','Linen shirt','Light trousers'),
+      pin('839147343103601575','Sigiriya sightseeing layers','Cotton tee','Walking shorts'),
+      pin('803400021067644465','Sri Lanka linen day look','Relaxed linen set','Flat sandals'),
+      pin('857795060327621906','Coastal café stop','Cotton sundress','Crossbody bag'),
+      pin('424675440311649485','Tea country wander','Light jacket','Comfortable jeans'),
+      pin('452471093835144725','Tropical town afternoon','Linen shorts','Tank top'),
+      pin('905997650029428387','Palm-fringed beach day','Swim cover-up','Sun hat'),
+      pin('416583034301625263','Sri Lanka travel outfit guide','Breathable day dress','Walking sandals'),
+    ],
+    Polished:[
+      pin('649151733831560908','Resort linen layers','Linen shirt','Wide-leg trousers'),
+      pin('672725263132820248','White summer dress','White midi dress','Leather sandals'),
+      pin('526358275218234219','Coastal matching set','Cotton co-ord','Woven tote'),
+      pin('724446290098119295','Beachfront linen edit','Linen trousers','Sleeveless top'),
+      pin('468585536252663594','Relaxed resort styling','Linen shirt dress','Flat sandals'),
+      pin('623185667227162778','Island afternoon look','Flowy maxi dress','Raffia bag'),
+      pin('1138003399625022592','Easy linen maxi','Linen maxi dress','Minimal sandals'),
+      pin('4593953217478134656','Straw-tone summer dress','Neutral maxi dress','Woven shoulder bag'),
+    ],
+    Evening:[
+      pin('1089941547317767316','Dinner by the Indian Ocean','Satin slip dress','Strappy sandals'),
+      pin('1089800809865040997','Floral evening maxi','Floral maxi dress','Gold earrings'),
+      pin('801711171208458457','Candlelit resort dinner','Midi evening dress','Small clutch'),
+      pin('1095641415623694974','Pink sunset dress','Pink cut-out maxi dress','Metallic sandals'),
+      pin('1100778333938080919','Burgundy dinner look','Burgundy midi dress','Evening heels'),
+      pin('670543832065552693','Golden-hour yellow dress','Yellow evening dress','Gold sandals'),
+      pin('771593348704899476','Coastal night-out look','Printed evening dress','Statement earrings'),
+      pin('1117948307533786608','Satin after-dark look','Green satin dress','Evening sandals'),
+    ],
+  },
+  Udaipur:{
+    Easy:[
+      pin('658792251781575194','Lake Pichola day look','Cotton day dress','Comfortable sandals'),
+      pin('415879346864442174','Easy kurti and trousers','Cotton kurti','Straight trousers'),
+      pin('939845016015864261','Linen palace walk','Linen trousers','Relaxed shirt'),
+      pin('1111896595513358078','Udaipur café afternoon','Printed midi dress','Flat sandals'),
+      pin('648518415124745090','Old-city wander','Breezy cotton top','Wide-leg trousers'),
+      pin('803540758542916724','Comfortable heritage walk','Light kurta','Walking flats'),
+      pin('1093882197024809287','Udaipur vacation outfit','Flowy summer dress','Woven tote'),
+      pin('879327896011817054','Lakeside sightseeing','Cotton co-ord','Leather sandals'),
+    ],
+    Polished:[
+      pin('1137933030845674984','Palace courtyard chic','Printed kurta set','Jhumka earrings'),
+      pin('774267360975216097','Pastel lakeside styling','Pastel maxi dress','Delicate jewellery'),
+      pin('1088393434978413689','Udaipur terrace look','Patterned maxi dress','Strappy sandals'),
+      pin('984881012267728066','City Palace colour story','Embroidered skirt','Fitted blouse'),
+      pin('984881012267728113','Blue lakeside dress','Blue midi dress','Silver earrings'),
+      pin('1095359940641817526','Red and ivory fusion','Printed red top','White flowing skirt'),
+      pin('1112811389201239521','Udaipur outfit diary','Indo-western co-ord','Statement earrings'),
+      pin('1127307350509526415','Gazebo-side elegance','Blue maxi dress','Minimal sandals'),
+    ],
+    Evening:[
+      pin('1058627456171526323','Udaipur dinner-ready dress','Satin midi dress','Dressy sandals'),
+      pin('1002473198314818692','Palace evening glamour','Embellished evening dress','Clutch bag'),
+      pin('662451426485858286','Dinner-date styling','Sleek black dress','Gold jewellery'),
+      pin('536491374384538266','Romantic lakeside dinner','Flowy evening dress','Kitten heels'),
+      pin('860257966367379075','Taj Lake Palace dinner','Elegant evening dress','Statement earrings'),
+      pin('1095641415623604578','Golden olive satin','Olive satin dress','Gold sandals'),
+      pin('830280881352669908','Moonlit lake-palace look','Blue evening dress','Small shoulder bag'),
+      pin('879398264778298799','Udaipur dinner edit','Embroidered evening set','Metallic clutch'),
+    ],
+  },
+  Jaipur:{
+    Easy:[
+      pin('841258405403010268','Hawa Mahal day out','Printed skirt','Light cotton top'),
+      pin('375276581451229147','Rajasthan sightseeing layers','Denim jacket','Striped skirt'),
+      pin('637259416030260804','Pink City traditional look','Embroidered skirt','Red blouse'),
+      pin('722194490282614805','Jaipur outfit inspiration','Cotton co-ord','Comfortable sandals'),
+      pin('1090785972266018406','City Palace denim day','Denim dress','Walking shoes'),
+      pin('710513278752814155','Jaipur travel outfit ideas','Printed kurta','Straight trousers'),
+      pin('831547518745257011','A Jaipur favourite','Breezy day dress','Flat sandals'),
+      pin('613685886767163981','Jaipur fits in the sun','Cotton top','Flowy skirt'),
+    ],
+    Polished:[
+      pin('401946335510169189','City Palace colour pairing','Printed kurta','Tailored trousers'),
+      pin('697776536067779368','Heritage courtyard look','Embroidered jacket','Midi skirt'),
+      pin('648518415115556789','Jaipur day-to-dinner style','Printed co-ord','Structured bag'),
+      pin('599189925460257136','A polished Pink City look','Lightweight kurta','Wide-leg pants'),
+      pin('420875527700151058','Summer occasion outfit','Printed summer set','Minimal sandals'),
+      pin('670543832057160824','Colourful city styling','Bright cotton dress','Statement earrings'),
+      pin('1077204804635191936','Jaipur heritage layers','Longline jacket','Straight trousers'),
+      pin('627478160615416024','Palace-room elegance','Long printed dress','Delicate jewellery'),
+    ],
+    Evening:[
+      pin('1056516393858069420','Dinner after the forts','Satin skirt','Evening top'),
+      pin('634303928806464140','Pink City after dark','Black evening dress','Metallic heels'),
+      pin('731272058284733017','Courtyard lights look','Floral midi dress','Small shoulder bag'),
+      pin('1104507877408920610','Jaipur festive evening','Printed evening dress','Gold earrings'),
+      pin('665829126204692578','Dinner under the lights','Statement top','Tailored trousers'),
+      pin('903253269036183148','Rooftop dinner edit','Flowy maxi dress','Dressy sandals'),
+      pin('855824735485718153','Indo-western evening set','Blue fusion co-ord','Statement earrings'),
+      pin('993817842796542881','Pink City night-out look','Embellished midi dress','Metallic clutch'),
+    ],
+  },
+};
 const thaiStops:DestinationName[]=['Bangkok','Phuket','Pattaya','Chiang Mai','Krabi'];
 const styles:DayStyle[]=['Easy','Polished','Evening'];
 // Four additional pool positions per stop, in thaiStops order. These keep
@@ -174,6 +272,7 @@ const makeLook=(place:DestinationName,style:DayStyle,item:PinIdea,index:number):
 });
 export const looks:MoodLook[]=[
   ...(Object.keys(cities) as Array<keyof typeof cities>).flatMap(place=>styles.flatMap(style=>cities[place][style].map((item,index)=>makeLook(place,style,item,index)))),
+  ...(Object.keys(newDestinationLooks) as Array<keyof typeof newDestinationLooks>).flatMap(place=>styles.flatMap(style=>newDestinationLooks[place][style].map((item,index)=>makeLook(place,style,item,index)))),
   ...thaiStops.flatMap((place,stop)=>styles.flatMap(style=>{
     const pool=thailand[style];
     const original=Array.from({length:4},(_,index)=>pool[(stop*2+index)%10]);
